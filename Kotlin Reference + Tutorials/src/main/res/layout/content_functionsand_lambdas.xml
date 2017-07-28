@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/SCROLLER_ID2"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:scrollbars="vertical"
+android:fillViewport="true"
+app:layout_behavior="@string/appbar_scrolling_view_behavior"
+tools:context="com.test.kotlintutorial.FunctionsandLambdasActivity"
+tools:showIn="@layout/activity_functionsand_lambdas"
+    android:background="@drawable/kotlingalexybg">
+
+<android.support.constraint.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/txtTopicFunctionsandLambdas"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/topicFunctionsandLambdas"
+        android:textAllCaps="false"
+        android:textColor="@color/colorForTxt002"
+        tools:layout_editor_absoluteX="4dp"
+        tools:layout_editor_absoluteY="5dp" />
+
+    <Button
+        android:id="@+id/btnFunctions"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="@string/labelFunctions"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
+        android:background="@color/colorLightBlue"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/txtTopicFunctionsandLambdas"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/btnLambdas"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="@string/labelLambdas"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
+        android:background="@color/colorLightBlue"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnFunctions"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/btnInlineFunctions"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="@string/labelInlineFunctions"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
+        android:background="@color/colorLightBlue"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnLambdas"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/btnCoroutines"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="@string/labelCoroutines"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
+        android:background="@color/colorLightBlue"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnInlineFunctions"
+        android:layout_marginTop="5dp"/>
+
+</android.support.constraint.ConstraintLayout>
+</ScrollView>

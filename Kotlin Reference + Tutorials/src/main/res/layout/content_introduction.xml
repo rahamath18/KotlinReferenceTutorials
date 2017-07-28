@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/SCROLLER_ID2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="com.test.kotlintutorial.IntroductionActivity"
+        tools:showIn="@layout/activity_introduction"
+        android:background="@drawable/kotlingalexybg">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/txtTopicIntro"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/topicIntro"
+        android:textColor="@color/colorForTxt002"
+        android:textAllCaps="false"
+        tools:layout_editor_absoluteX="4dp"
+        tools:layout_editor_absoluteY="5dp" />
+
+    <Button
+        android:id="@+id/btnKotlinprogramminglanguage"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="@string/labelKotlinprogramminglanguage"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
+        android:background="@color/colorLightBlue"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/txtTopicIntro"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/btnKotlinforServerSide"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="@string/labelKotlinforServerSide"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
+        android:background="@color/colorLightBlue"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnKotlinprogramminglanguage"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/btnKotlinforAndroid"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="@string/labelKotlinforAndroid"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
+        android:background="@color/colorLightBlue"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnKotlinforServerSide"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/btnKotlinforJavaScript"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="@string/labelKotlinforJavaScript"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
+        android:background="@color/colorLightBlue"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnKotlinforAndroid"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/btnWhatsNewin11"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="@string/labelWhatsNewin11"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
+        android:background="@color/colorLightBlue"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnKotlinforJavaScript"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/btnBasicSyntax"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="@string/labelBasicSyntax"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
+        android:background="@color/colorLightBlue"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnWhatsNewin11"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/btnIdioms"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="@string/labelIdioms"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
+        android:background="@color/colorLightBlue"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnBasicSyntax"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/btnCodingConventions"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="@string/labelCodingConventions"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
+        android:background="@color/colorLightBlue"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnIdioms"
+        android:layout_marginTop="5dp"/>
+
+</android.support.constraint.ConstraintLayout>
+</ScrollView>

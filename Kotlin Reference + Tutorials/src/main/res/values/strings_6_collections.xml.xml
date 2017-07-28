@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string name="labelCollections"> 6. Collections</string>
+
+    <string name="labelCollectionsIntroduction">6.1 Collections Introduction</string>
+    <string name="labelListJavavsKotlin">6.2 java.util.List - Java vs Kotlin</string>
+    <string name="labelSetJavavsKotlin">6.3 java.util.Set - Java vs Kotlin</string>
+    <string name="labelMapJavavsKotlin">6.4 java.util.Map - Java vs Kotlin</string>
+
+    <string name="topicCollections">
+         <![CDATA[
+
+            Collections Introduction
+
+         ]]>
+     </string>
+
+    <string name="topicContentCollectionsIntroduction">
+		<![CDATA[
+
+		    <h1 id="collections">Collections</h1>
+
+            <p>
+                Unlike many languages, Kotlin distinguishes between mutable and immutable
+                collections (lists, sets, maps, etc). Precise control over exactly when
+                collections can be edited is useful for eliminating bugs, and for designing
+                good APIs.
+            </p>
+            <p>
+            It is important to understand up front the difference between a read-only    <em>view</em> of a mutable collection, and an actually immutable
+                collection. Both are easy to create, but the type system doesn\'t express
+                the difference, so keeping track of that (if it\'s relevant) is up to you.
+            </p>
+            <p>
+                The Kotlin <code>List&lt;out T&gt;</code> type is an interface that
+                provides read-only operations like <code>size</code>, <code>get</code> and
+                so on. Like in Java, it inherits from <code>Collection&lt;T&gt;</code> and
+                that in turn inherits from <code>Iterable&lt;T&gt;</code>. Methods that
+                change the list are added by the <code>MutableList&lt;T&gt;</code>
+            interface. This pattern holds also for<code>Set&lt;out T&gt;/MutableSet&lt;T&gt;</code> and    <code>Map&lt;K, out V&gt;/MutableMap&lt;K, V&gt;</code>.
+            </p>
+            <p>
+                We can see basic usage of the list and set types below:
+            </p>
+            <pre><code>
+
+                <font color="#0037b3">val</font> numbers: MutableList&lt;Int&gt; = mutableListOf(1, 2, 3) <br> <br>
+
+                <font color="#0037b3">val</font> readOnlyView: List&lt;Int&gt; = numbers <br> <br>
+
+                println(numbers)        // prints "[1, 2, 3]" <br> <br>
+
+                numbers.add(4) <br> <br>
+
+                println(readOnlyView)   // prints "[1, 2, 3, 4]" <br> <br>
+
+                readOnlyView.clear()    // -&gt; does not compile <br> <br>
+
+                <font color="#0037b3">val</font> strings = hashSetOf(<font color="#4ed297">\"a\"</font>,
+                                        <font color="#4ed297">\"b\"</font>,
+                                        <font color="#4ed297">\"c\"</font>,
+                                        <font color="#4ed297">\"c\"</font>) <br> <br>
+
+                assert(strings.size == 3) <br> <br>
+
+            </code></pre>
+
+            <p>
+                Kotlin does not have dedicated syntax constructs for creating lists or
+            sets. Use methods from the standard library, such as <code>listOf()</code>,<code>mutableListOf()</code>, <code>setOf()</code>,    <code>mutableSetOf()</code>. Map creation in NOT performance-critical code
+                can be accomplished with a simple
+                <a href="https://kotlinlang.org/docs/reference/idioms.html#read-only-map">
+                    idiom
+                </a>
+                : <code>mapOf(a to b, c to d)</code>
+            </p>
+            <p>
+                Note that the <code>readOnlyView</code> variable points to the same list
+                and changes as the underlying list changes. If the only references that
+                exist to a list are of the read-only variety, we can consider the
+                collection fully immutable. A simple way to create such a collection is
+                like this:
+            </p>
+            <pre><code>
+
+            <font color="#0037b3">val</font> items = listOf(1, 2, 3)
+
+            </code></pre>
+            <p>
+                Currently, the <code>listOf</code> method is implemented using an array
+                list, but in future more memory-efficient fully immutable collection types
+                could be returned that exploit the fact that they know they can\'t change.
+            </p>
+            <p>
+                Note that the read-only types are
+                <a href="https://kotlinlang.org/docs/reference/generics.html#variance">
+                    covariant
+                </a>
+                . That means, you can take a <code>List&lt;Rectangle&gt;</code> and assign
+                it to <code>List&lt;Shape&gt;</code> assuming Rectangle inherits from
+                Shape. This wouldn\'t be allowed with the mutable collection types because
+                it would allow for failures at runtime.
+            </p>
+            <p>
+                Sometimes you want to return to the caller a snapshot of a collection at a
+                particular point in time, one that\'s guaranteed to not change:
+            </p>
+            <pre><code>
+
+            <font color="#0037b3">class</font> Controller { <br> <br>
+                &nbsp;&nbsp;&nbsp;private <font color="#0037b3">val</font> _items = mutableListOf&lt;String&gt;() <br> <br>
+                &nbsp;&nbsp;&nbsp;<font color="#0037b3">val</font> items: List&lt;String&gt; get() = _items.toList() <br> <br>
+            }
+
+            </code></pre>
+            <p>
+                The <code>toList</code> extension method just duplicates the lists items,
+                thus, the returned list is guaranteed to never change.
+            </p>
+            <p>
+                There are various useful extension methods on lists and sets that are worth
+                being familiar with:
+            </p>
+            <pre><code>
+
+            <font color="#0037b3">val</font> items = listOf(1, 2, 3, 4) <br> <br>
+
+            items.first() == 1 <br> <br>
+
+            items.last() == 4 <br> <br>
+
+            items.filter { <br> <br>
+                &nbsp;&nbsp;&nbsp;it % 2 == 0 <br> <br>
+            } <br> <br>
+            // returns [2, 4] <br> <br>
+
+            <font color="#0037b3">val</font> rwList = mutableListOf(1, 2, 3) <br> <br>
+
+            rwList.requireNoNulls()        // returns [1, 2, 3] <br> <br>
+
+            <font color="#0037b3">if</font> (rwList.none { it &gt; 6 }) println(<font color="#4ed297">\"No items above 6\"</font>)  // prints "No items above 6" <br> <br>
+
+            <font color="#0037b3">val</font> item = rwList.firstOrNull() <br> <br>
+
+            </code></pre>
+            <p>
+                … as well as all the utilities you would expect such as sort, zip, fold,
+                reduce and so on.
+            </p>
+            <p>
+                Maps follow the same pattern. They can be easily instantiated and accessed
+                like this:
+            </p>
+            <pre><code>
+
+            <font color="#0037b3">val</font> readWriteMap = hashMapOf(<font color="#4ed297">\"foo\"</font> to 1, <font color="#4ed297">\"bar\"</font> to 2) <br> <br>
+
+            println(readWriteMap[<font color="#4ed297">\"foo\"</font>])  // prints <font color="#4ed297">\"1\"</font> <br> <br>
+
+            <font color="#0037b3">val</font> snapshot: Map&lt;String, Int&gt; = HashMap(readWriteMap)
+
+            </code></pre>
+	    ]]>
+	</string>
+
+    <string name="topicContentListJavavsKotlin">
+		<![CDATA[
+
+ 			<h3>java.util.List - Java vs Kotlin</h3>
+
+			<h3>Example 1:</h3>
+
+			<h4>Java</h4>
+
+			// java.util.List<Integer> with java classic style <br> <br>
+			List<Integer> aNumList = new ArrayList<Integer>(); <br> <br>
+			aNumList.add(11); <br> <br>
+			aNumList.add(12); <br> <br>
+			aNumList.add(13); <br> <br>
+
+			<font color="#0037b3">for</font> (int i = 0; i < aNumList.size(); i++) { <br> <br>
+				&nbsp;&nbsp;&nbsp;System.out.println(aNumList.get(i)); <br> <br>
+			} <br> <br>
+			<font color="#0037b3">for</font> (Iterator iterator = aNumList.iterator(); iterator.hasNext();) { <br> <br>
+				&nbsp;&nbsp;&nbsp;Integer value = (Integer) iterator.next(); <br> <br>
+				&nbsp;&nbsp;&nbsp;System.out.println(value); <br> <br>
+			} <br> <br>
+
+			<h4>Kotlin</h4>
+
+			// java.util.List<Integer> with kotlin new style <br> <br>
+			<font color="#0037b3">val</font> aNumList = ArrayList<Int>() <br> <br>
+			aNumList.add(11) <br> <br>
+			aNumList.add(12) <br> <br>
+			aNumList.add(13) <br> <br>
+
+			<font color="#0037b3">for</font> (i in aNumList.indices) { <br> <br>
+				&nbsp;&nbsp;&nbsp;println(aNumList[i]) <br> <br>
+			} <br> <br>
+			run { <br> <br>
+				&nbsp;&nbsp;&nbsp;<font color="#0037b3">val</font> iterator = aNumList.iterator() <br> <br>
+				&nbsp;&nbsp;&nbsp;while (iterator.hasNext()) { <br> <br>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;println(iterator.next()) <br> <br>
+				&nbsp;&nbsp;&nbsp;} <br> <br>
+			} <br> <br>
+
+			<h3>Example 2:</h3>
+
+			<h4>Java</h4>
+
+			// java.util.List<String> with java classic style <br> <br>
+			List<String> aStrList = new ArrayList<String>(); <br> <br>
+			aStrList.add("John"); <br> <br>
+			aStrList.add("Mathew"); <br> <br>
+			aStrList.add("Gospal"); <br> <br>
+
+			<font color="#0037b3">for</font> (int i = 0; i < aStrList.size(); i++) { <br> <br>
+				&nbsp;&nbsp;&nbsp;System.out.println(aStrList.get(i)); <br> <br>
+			} <br> <br>
+			<font color="#0037b3">for</font> (Iterator iterator = aStrList.iterator(); iterator.hasNext();) { <br> <br>
+				&nbsp;&nbsp;&nbsp;String value = (String) iterator.next(); <br> <br>
+				&nbsp;&nbsp;&nbsp;System.out.println(value); <br> <br>
+			} <br> <br>
+
+			<h4>Kotlin</h4>
+
+			// java.util.List<String> with kotlin new style <br> <br>
+			<font color="#0037b3">val</font> aStrList = ArrayList<String>() <br> <br>
+			aStrList.add("John") <br> <br>
+			aStrList.add("Mathew") <br> <br>
+			aStrList.add("Gospal") <br> <br>
+
+			<font color="#0037b3">for</font> (i in aStrList.indices) { <br> <br>
+				&nbsp;&nbsp;&nbsp;println(aStrList[i]) <br> <br>
+			} <br> <br>
+			<font color="#0037b3">val</font> iterator = aStrList.iterator() <br> <br>
+			while (iterator.hasNext()) { <br> <br>
+				&nbsp;&nbsp;&nbsp;println(iterator.next()) <br> <br>
+			} <br> <br>
+
+			<h3>Example 3:</h3>
+
+			<h4>Java</h4>
+
+			// java.util.List<Integer> with Method Reference approach <br> <br>
+			List<Integer> aNumberList = Arrays.asList(1, 2, 3); <br> <br>
+			aNumberList.forEach(System.out::println); <br> <br>
+
+			<font color="#0037b3">for</font> (Integer value : aNumberList) { <br> <br>
+				&nbsp;&nbsp;&nbsp;System.out.println(value); <br> <br>
+			} <br> <br>
+
+			<h4>Kotlin</h4>
+
+			// java.util.List<Integer> with Functional interface approach <br> <br>
+			<font color="#0037b3">val</font> aNumberList = Arrays.asList(1, 2, 3) <br> <br>
+			aNumberList.forEach(Consumer<Int> { println(it) }) <br> <br>
+
+			<font color="#0037b3">for</font> (value in aNumberList) { <br> <br>
+				&nbsp;&nbsp;&nbsp;println(value) <br> <br>
+			} <br> <br>
+
+			<h3>Example 4:</h3>
+
+			<h4>Java</h4>
+
+			// java.util.List<String> with Method Reference approach <br> <br>
+			List<String> aStringList = Arrays.asList("Apple", "Banana", "Mango"); <br> <br>
+			aStringList.forEach(System.out::println); <br> <br>
+
+			<font color="#0037b3">for</font> (String value : aStringList) { <br> <br>
+				&nbsp;&nbsp;&nbsp;System.out.println(value); <br> <br>
+			} <br> <br>
+
+			<h4>Kotlin</h4>
+
+			// java.util.List<String> with Functional interface approach <br> <br>
+			<font color="#0037b3">val</font> aStringList = Arrays.asList("Apple", "Banana", "Mango") <br> <br>
+			aStringList.forEach(Consumer<String> { println(it) }) <br> <br>
+
+			<font color="#0037b3">for</font> (value in aStringList) { <br> <br>
+				&nbsp;&nbsp;&nbsp;println(value) <br> <br>
+			} <br> <br>
+
+		]]>
+	</string>
+
+    <string name="topicContentSetJavavsKotlin">
+		<![CDATA[
+
+ 			<h2>java.util.Set - Java vs Kotlin</h2>
+
+			<h3>Example 1:</h3>
+
+			<h4>Java</h4>
+
+			// java.util.Set<Integer> with classic approach <br> <br>
+	        Set<Integer> aNumSet = new HashSet<Integer>(); <br> <br>
+	        aNumSet.add(11); <br> <br>
+	        aNumSet.add(12); <br> <br>
+	        aNumSet.add(13); <br> <br>
+
+	        <font color="#0037b3">for</font> (Iterator iterator = aNumSet.iterator(); iterator.hasNext();) { <br> <br>
+	            &nbsp;&nbsp;&nbsp;Integer value = (Integer) iterator.next(); <br> <br>
+	            &nbsp;&nbsp;&nbsp;System.out.println(value); <br> <br>
+	        } <br> <br>
+
+	        // java.util.Set<String> with classic approach <br> <br>
+	        Set<String> aStrSet = new HashSet<String>(); <br> <br>
+	        aStrSet.add("John"); <br> <br>
+	        aStrSet.add("Mathew"); <br> <br>
+	        aStrSet.add("Gospal"); <br> <br>
+
+	        for (String value : aStrSet) { <br> <br>
+	            &nbsp;&nbsp;&nbsp;System.out.println(value); <br> <br>
+			} <br> <br>
+
+			<h4>Kotlin</h4>
+
+			// java.util.Set<Integer> with classic approach <br> <br>
+			<font color="#0037b3">val</font> aNumSet = HashSet<Int>() <br> <br>
+			aNumSet.add(11) <br> <br>
+			aNumSet.add(12) <br> <br>
+			aNumSet.add(13) <br> <br>
+
+			<font color="#0037b3">val</font> iterator = aNumSet.iterator() <br> <br>
+			<font color="#0037b3">while</font> (iterator.hasNext()) { <br> <br>
+				&nbsp;&nbsp;&nbsp;println(iterator.next()) <br> <br>
+			} <br> <br>
+
+			// java.util.Set<String> with classic approach <br> <br>
+			<font color="#0037b3">val</font> aStrSet = HashSet<String>() <br> <br>
+			aStrSet.add("John") <br> <br>
+			aStrSet.add("Mathew") <br> <br>
+			aStrSet.add("Gospal") <br> <br>
+
+			for (value in aStrSet) { <br> <br>
+				&nbsp;&nbsp;&nbsp;println(value) <br> <br>
+			}
+
+		]]>
+	</string>
+
+    <string name="topicContentMapJavavsKotlin">
+		<![CDATA[
+
+ 			<h2>java.util.Map - Java vs Kotlin</h2>
+
+			<h3>Example 1:</h3>
+
+			<h4>Java</h4>
+
+			HashMap<String, String> aMap = new HashMap<String, String>(); <br> <br>
+			aMap.put("name1", "John"); <br> <br>
+			aMap.put("name2", "Mathew"); <br> <br>
+			aMap.put("name3", "Gospal"); <br> <br>
+
+			Set<String> aKeySet = aMap.keySet(); <br> <br>
+			<font color="#0037b3">for</font> (String key : aKeySet) { <br> <br>
+				&nbsp;&nbsp;&nbsp;System.out.println(aMap.get(key)); <br> <br>
+			} <br> <br>
+
+			<h4>Kotlin</h4>
+
+			<font color="#0037b3">val</font> aMap = HashMap<String, String>() <br> <br>
+			aMap.put("name1", "John") <br> <br>
+			aMap.put("name2", "Mathew") <br> <br>
+			aMap.put("name3", "Gospal") <br> <br>
+
+			<font color="#0037b3">val</font> aKeySet = aMap.keys <br> <br>
+			<font color="#0037b3">for</font> (key in aKeySet) { <br> <br>
+				&nbsp;&nbsp;&nbsp;println(aMap[key]) <br> <br>
+			}
+
+		]]>
+	</string>
+
+</resources>

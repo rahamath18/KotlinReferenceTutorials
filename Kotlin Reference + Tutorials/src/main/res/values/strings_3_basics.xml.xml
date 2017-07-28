@@ -1,0 +1,756 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="labelBasics"> 3. Basics</string>
+
+    <string name="labelBasicTypes">2.1 Basic Types</string>
+    <string name="labelPackages">2.2 Packages</string>
+    <string name="labelControlFlow">2.3 Control Flow</string>
+    <string name="labelReturnsandJumps">2.4 Returns and Jumps</string>
+
+    <string name="topicBasics">
+         <![CDATA[
+
+                This topic explains kotlin basics.
+
+         ]]>
+    </string>
+
+    <string name="topicContentBasicTypes">
+         <![CDATA[
+
+             <h3>Basic Types</h3>
+
+             <p>
+                In Kotlin, everything is an object in the sense that we can call member
+                functions and properties on any variable. Some of the types can have a
+                special internal representation - for example, numbers, characters and booleans
+                can be represented as primitive values at runtime - but to the user they look like
+                ordinary classes. In this section we describe the basic types used in Kotlin: numbers,
+                characters, booleans, arrays, and strings.
+            </p>
+
+            <h4>Numbers</h4>
+              <p>
+              Kotlin handles numbers in a way close to Java, but not exactly the same. For example,
+              there are no implicit widening conversions for numbers, and literals are slightly different in some cases.
+              </p>
+              <p>Kotlin provides the following built-in types representing numbers (this is close to Java):</p>
+              </p>
+              <h2>Type Bit &nbsp;&nbsp;&nbsp; width</h2>
+                  Double &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 64 <br> <br>
+                  Float &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 32 <br> <br>
+                  Long &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 64 <br> <br>
+                  Int &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 32 <br> <br>
+                  Short &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 16 <br> <br>
+                  Byte &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 8 <br> <br>
+              </p>
+              <p>Note that characters are not numbers in Kotlin.<p>
+              <h3>Literal Constants</h3>
+
+
+              <p>There are the following kinds of literal constants for integral values:</p>
+              <p>
+                      Decimals: 123 <br> <br>
+                      Longs are tagged by a capital L: 123L <br> <br>
+                      Hexadecimals: 0x0F <br> <br>
+                      Binaries: 0b00001011 <br> <br>
+              NOTE: Octal literals are not supported. <br> <br>
+              </p>
+              <p>Kotlin also supports a conventional notation for floating-point numbers:
+                      Doubles by default: 123.5, 123.5e10 <br> <br>
+                      Floats are tagged by f or F: 123.5f <br> <br>
+              </p>
+
+              <h3>Underscores in numeric literals (since 1.1)</h3>
+               <p>You can use underscores to make number constants more readable:</p>
+              <p>
+              <font color="#0037b3">val</font> oneMillion = <font color="#0037b3">1_000_000</font> <br> <br>
+              <font color="#0037b3">val</font> creditCardNumber = <font color="#0037b3">1234_5678_9012_3456L</font> <br> <br>
+              <font color="#0037b3">val</font> socialSecurityNumber = <font color="#0037b3">999_99_9999L</font> <br> <br>
+              <font color="#0037b3">val</font> hexBytes = <font color="#0037b3">0xFF_EC_DE_5E</font> <br> <br>
+              <font color="#0037b3">val</font> bytes = <font color="#0037b3">0b11010010_01101001_10010100_10010010</font> <br> <br>
+              </p>
+
+            <h3>Representation</h3>
+              <p>
+              On the Java platform, numbers are physically stored as JVM primitive types, unless we need a
+              nullable number reference (e.g. Int?) or generics are involved. In the latter cases numbers are boxed.
+              </p>
+              <p>
+              Note that boxing of numbers does not necessarily preserve identity:
+              </p>
+
+
+              <font color="#0037b3">val</font> a: Int = 10000 <br> <br>
+              print(a === a) // Prints \'true\' <br> <br>
+
+
+              <font color="#0037b3">val</font> boxedA: Int? = a <br> <br>
+              <font color="#0037b3">val</font> anotherBoxedA: Int? = a <br> <br>
+              print(boxedA === anotherBoxedA) // !!!Prints \'false\'!!! <br> <br>
+
+              <p>On the other hand, it preserves equality:</p>
+              <font color="#0037b3">val </font>a: Int = 10000 <br> <br>
+              print(a == a) // Prints \'true\' <br> <br>
+              <font color="#0037b3">val </font>boxedA: Int? = a <br> <br>
+              <font color="#0037b3">val </font>anotherBoxedA: Int? = a <br> <br>
+              print(boxedA == anotherBoxedA) // Prints \'true\' <br> <br>
+
+              <h3>Explicit Conversions</h3>
+              <p>Due to different representations, smaller types are not subtypes of bigger ones. If they were,
+              we would have troubles of the following sort:</p>
+              // Hypothetical code, does not actually compile: <br> <br>
+              <font color="#0037b3">val </font>a: Int? = 1 // A boxed Int (java.lang.Integer) <br> <br>
+              <font color="#0037b3">val </font>b: Long? = a // implicit conversion yields a boxed Long (java.lang.Long) <br> <br>
+              print(a == b) // Surprise! This prints "false" as Long\'s equals() check for other part to be Long as well <br> <br>
+
+              <p>So not only identity, but even equality would have been lost silently all over the place.</p>
+              <p>As a consequence, smaller types are NOT implicitly converted to bigger types.
+              This means that we cannot assign a value of type Byte to an Int variable without an explicit conversion</p>
+              <font color="#0037b3">val </font>b: Byte = 1 // OK, literals are checked statically <br> <br>
+              <font color="#0037b3">val </font>i: Int = b // ERROR <br> <br>
+
+              <p>We can use explicit conversions to widen numbers</p>
+              <font color="#0037b3">val </font>i: Int = b.toInt() // OK: explicitly widened <br> <br>
+
+              <p>Every number type supports the following conversions:</p>
+                      toByte(): Byte <br> <br>
+                      toShort(): Short <br> <br>
+                      toInt(): Int <br> <br>
+                      toLong(): Long <br> <br>
+                      toFloat(): Float <br> <br>
+                      toDouble(): Double <br> <br>
+                      toChar(): Char <br> <br>
+
+              <p>Absence of implicit conversions is rarely noticeable because the type is inferred from the context,
+              and arithmetical operations are overloaded for appropriate conversions, for example</p>
+              <font color="#0037b3">val </font>l = 1L + 3 // Long + Int => Long <br> <br>
+
+              <h3>Operations</h3>
+              <p>
+                Kotlin supports the standard set of arithmetical operations over numbers, which are declared as
+              members of appropriate classes (but the compiler optimizes the calls down to the corresponding instructions).
+
+              <a href=“https://kotlinlang.org/docs/reference/operator-overloading.html”>See Operator overloading</a>
+
+              </p>
+              <p>As of bitwise operations, there\'re no special characters for them, but just
+              named functions that can be called in infix form, for example:</p>
+              <font color="#0037b3">val </font>x = (1 shl 2) and 0x000FF000 <br> <br>
+
+              <p>Here is the complete list of bitwise operations (available for Int and Long only):</p>
+                      shl(bits) – signed shift left (Java\'s <<) <br> <br>
+                      shr(bits) – signed shift right (Java\'s >>) <br> <br>
+                      ushr(bits) – unsigned shift right (Java\'s >>>) <br> <br>
+                      and(bits) – bitwise and <br> <br>
+                      or(bits) – bitwise or <br> <br>
+                      xor(bits) – bitwise xor <br> <br>
+                      inv() – bitwise inversion <br> <br>
+
+              <h3Characters</h3>
+              <p>Characters are represented by the type Char. They can not be treated directly as numbers</p>
+              <font color="#0037b3">fun</font> check(c: Char) { <br> <br>
+                  &nbsp;&nbsp;&nbsp;if (c == 1) { // ERROR: incompatible types <br> <br>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// - - - <br> <br>
+                  &nbsp;&nbsp;&nbsp;} <br> <br>
+              } <br> <br>
+
+              <p>Character literals go in single quotes: \'1\'. Special characters can be escaped using a backslash.
+              The following escape sequences are supported: \\t, \\b, \\n, \\r, \\\', \\", \\ and \$. To encode any other character,
+              use the Unicode escape sequence syntax: \'\uFF00'.</p>
+              <p>We can explicitly convert a character to an Int number:</p>
+              fun decimalDigitValue(c: Char): Int { <br> <br>
+                  &nbsp;&nbsp;&nbsp;if (c !in \'0\'..\'9\') <br> <br>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throw IllegalArgumentException("Out of range") <br> <br>
+                  &nbsp;&nbsp;&nbsp;return c.toInt() - \'0\'.toInt() // Explicit conversions to numbers <br> <br>
+              } <br> <br>
+
+              <p>Like numbers, characters are boxed when a nullable reference is needed.
+              Identity is not preserved by the boxing operation.</p>
+              <h3>Booleans</h3>
+              <p>The type Boolean represents booleans, and has two values: true and false.</p>
+              <p>Booleans are boxed if a nullable reference is needed.</p>
+              <p>Built-in operations on booleans include</p>
+                      || – lazy disjunction <br> <br>
+                      && – lazy conjunction <br> <br>
+                      ! - negation <br> <br>
+
+              <h3>Arrays</h3>
+              <p>Arrays in Kotlin are represented by the Array class, that has get and set functions
+              (that turn into []by operator overloading conventions), and size property, along with a
+              few other useful member functions:</p>
+              class Array<T> private constructor() { <br> <br>
+                  &nbsp;&nbsp;&nbsp;<font color="#0037b3">val </font>size: Int <br> <br>
+                  &nbsp;&nbsp;&nbsp;operator fun get(index: Int): T <br> <br>
+                  &nbsp;&nbsp;&nbsp;operator fun set(index: Int, value: T): Unit <br> <br>
+
+                  &nbsp;&nbsp;&nbsp;operator fun iterator(): Iterator<T> <br> <br>
+                  &nbsp;&nbsp;&nbsp;// - - - <br> <br>
+              } <br> <br>
+
+            <p>To create an array, we can use a library function arrayOf() and pass the item values to it,
+              so that arrayOf(1, 2, 3) creates an array [1, 2, 3]. Alternatively, the arrayOfNulls() library
+              function can be used to create an array of a given size filled with null elements.</p>
+              <p>Another option is to use a factory function that takes the array size and the function that
+              can return the initial value of each array element given its index:</p>
+              // Creates an Array<String> with values ["0", "1", "4", "9", "16"] <br> <br>
+              <font color="#0037b3">val </font>asc = Array(5, { i -> (i * i).toString() }) <br> <br>
+
+              <p>As we said above, the [] operation stands for calls to member functions get() and set().</p>
+              <p>Note: unlike Java, arrays in Kotlin are invariant. This means that Kotlin does not let us assign an 
+              Array<String> to an Array<Any>, which prevents a possible runtime failure (but you can use Array<out Any>,
+
+               <a href=“https://kotlinlang.org/docs/reference/generics.html#type-projections)”>see Type Projections</a>
+
+              </p>
+              <p>Kotlin also has specialized classes to represent arrays of primitive types without boxing overhead: 
+              ByteArray, ShortArray, IntArray and so on. These classes have no inheritance relation to the Array class,
+              but they have the same set of methods and properties. Each of them also has a corresponding factory function:</p>
+              <font color="#0037b3">val </font>x: IntArray = intArrayOf(1, 2, 3) <br> <br>
+              x[0] = x[1] + x[2] <br> <br>
+
+              <h3>Strings</h3>
+              <p>Strings are represented by the type String. Strings are immutable. Elements of a string are characters
+              that can be accessed by the indexing operation: s[i]. A string can be iterated over with a for-loop:<p>
+              for (c in str) { <br> <br>
+                  &nbsp;&nbsp;&nbsp;println\(\c\) <br> <br>
+              } <br> <br>
+
+              <h3>String Literals</h3>
+              <p>Kotlin has two types of string literals: escaped strings that may have escaped characters in them and
+              raw strings that can contain newlines and arbitrary text. An escaped string is very much like a Java string:</p>
+              <font color="#0037b3">val </font>s = "Hello, world!\n" <br> <br>
+
+              <p>Escaping is done in the conventional way, with a backslash.
+
+              <a href=“https://kotlinlang.org/docs/reference/basic-types.html#characters”>See Characters</a>
+
+              above for the list of
+              supported escape sequences.</p>
+              <p>A raw string is delimited by a triple quote ("""), contains no escaping and can contain newlines
+              and any other characters:</p>
+              <font color="#0037b3">val </font>text = """ <br> <br>
+                  &nbsp;&nbsp;&nbsp;for \(\c in "foo") <br> <br>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print\(\c\) <br> <br>
+              """ <br> <br>
+
+              <p>You can remove leading whitespace with 
+
+              <a href=“https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/trim-margin.html”>trimMargin()</a> function: -
+
+
+              <font color="#0037b3">val </font>text = """ <br> <br>
+                  &nbsp;&nbsp;&nbsp;|Tell me and I forget. <br> <br>
+                  &nbsp;&nbsp;&nbsp;|Teach me and I remember. <br> <br>
+                  &nbsp;&nbsp;&nbsp;|Involve me and I learn. <br> <br>
+                  &nbsp;&nbsp;&nbsp;|(Benjamin Franklin) <br> <br>
+                  &nbsp;&nbsp;&nbsp;""".trimMargin() <br> <br>
+
+              <p>By default | is used as margin prefix, but you can choose another character and pass it as a parameter,
+              like trimMargin(“>”).</p>
+              <h3>String Templates</h3>
+              <p>Strings may contain template expressions, i.e. pieces of code that are evaluated and whose results
+              are concatenated into the string. A template expression starts with a dollar sign ($) and consists of
+              either a simple name:</p>
+              <font color="#0037b3">val </font>i = 10 <br> <br>
+              <font color="#0037b3">val </font>s = "i = $i" // evaluates to "i = 10" <br> <br>
+
+              <p>or an arbitrary expression in curly braces:</p>
+              <font color="#0037b3">val </font>s = "abc" <br> <br>
+              <font color="#0037b3">val </font>str = "$s.length is ${s.length}" // evaluates to "abc.length is 3" <br> <br>
+
+              <p>Templates are supported both inside raw strings and inside escaped strings. If you need to
+              represent a literal $ character in a raw string (which doesn\'t support backslash escaping),
+              you can use the following syntax:</p>
+              <font color="#0037b3">val </font>price = """ <br> <br>
+              ${\'$\'}9.99 <br> <br>
+              """ <br> <br>
+
+         ]]>
+    </string>
+
+    <string name="topicContentPackages">
+         <![CDATA[
+
+            <h3>Packages</h3>
+
+            <p>A source file may start with a package declaration:</p>
+
+            <font color="#0037b3">package</font> foo.bar <br> <br>
+
+
+            <font color="#0037b3">fun</font> baz() {} <br> <br>
+
+
+            <font color="#0037b3">class</font> Goo {} <br> <br>
+
+            // - - - <br> <br>
+
+
+            <p>All the contents (such as classes and functions) of the source file are contained by the package declared. So, in the example above, the full name of baz() is foo.bar.baz, and the full name of Goo is foo.bar.Goo.</p>
+
+            <p>If the package is not specified, the contents of such a file belong to \"default\" package that has no name.</p>
+
+            <h4>Default Imports</h4>
+
+            <p>A number of packages are imported into every Kotlin file by default:</p>
+
+            <p>
+                    kotlin.* <br> <br>
+                    kotlin.annotation.* <br> <br>
+                    kotlin.collections.* <br> <br>
+                    kotlin.comparisons.* (since 1.1) <br> <br>
+                    kotlin.io.* <br> <br>
+                    kotlin.ranges.* <br> <br>
+                    kotlin.sequences.* <br> <br>
+                    kotlin.text.* <br> <br>
+            </p>
+
+            <p>Additional packages are imported depending on the target platform:</p>
+
+        <p>
+
+        JVM: <br> <br>
+
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;java.lang.* <br> <br>
+
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kotlin.jvm.* <br> <br>
+
+        JS: <br> <br>
+
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;kotlin.js.* <br> <br>
+
+        </p>
+
+        <h4>Imports</h4>
+
+        <p> Apart from the default imports, each file may contain its own import directives. Syntax for imports is described in the </p>
+
+        <a href=“https://kotlinlang.org/docs/reference/grammar.html#import”>grammar</a>. <br> <br>
+
+        <p>We can import either a single name, e.g.</p>
+
+
+        <font color="#0037b3">import</font> foo.Bar // Bar is now accessible without qualification <br> <br>
+
+
+        <p>or all the accessible contents of a scope (package, class, object etc):</p>
+
+        <font color="#0037b3">import</font> foo.* // everything in \'foo\' becomes accessible <br> <br>
+
+
+        <p>If there is a name clash, we can disambiguate by using <font color="#0037b3">as</font> keyword to locally rename the clashing entity:</p>
+
+        <font color="#0037b3">import</font> foo.Bar // Bar is accessible <br> <br>
+
+        <font color="#0037b3">import</font> bar.Bar <font color="#0037b3">as</font> bBar // bBar stands for \'bar.Bar\' <br> <br>
+
+        <p>The import keyword is not restricted to importing classes; you can also use it to import other declarations:</p>
+
+        <p>
+                - top-level functions and properties; <br> <br>
+
+                - functions and properties declared in <a href=“https://kotlinlang.org/docs/reference/object-declarations.html#object-declarations”>object declarations</a> <br> <br>
+
+                - <a href=“https://kotlinlang.org/docs/reference/enum-classes.html”>enum constants</a> <br> <br>
+        </p>
+
+        <p>
+        Unlike Java, Kotlin does not have a separate 
+         <a href=“https://docs.oracle.com/javase/8/docs/technotes/guides/language/static-import.html”>import static</a>syntax;
+        all of these declarations are imported using the regular import keyword.
+
+        </p>
+
+        <h4>Visibility of Top-level Declarations</h4>
+
+        <p>
+        If a top-level declaration is marked <font color="#0037b3">private</font>,
+        it is private to the file it\'s declared in
+
+        (see <a href=“https://kotlinlang.org/docs/reference/visibility-modifiers.html”>Visibility Modifiers</a>).
+
+        </p>
+
+         ]]>
+    </string>
+
+    <string name="topicContentControlFlow">
+         <![CDATA[
+
+            <h3>Control Flow</h3>
+
+            <h4>If Expression</h4>
+
+            <p>In Kotlin, <font color="#0037b3">if</font> is an expression, i.e. it returns a value. Therefore there is no ternary operator
+            (condition ? then : else), because ordinary <font color="#0037b3">if</font> works fine in this role.</p>
+
+            // Traditional usage  <br> <br>
+
+            <font color="#0037b3">var</font> max = a  <br> <br>
+
+            <font color="#0037b3">if</font> (a < b) max = b <br> <br>
+
+            // With else  <br> <br>
+
+            <font color="#0037b3">var</font> max: Int <br> <br>
+
+            <font color="#0037b3">if</font> (a > b) { <br> <br>
+
+                &nbsp;&nbsp;&nbsp;max = a <br> <br>
+
+            } <font color="#0037b3">else</font> { <br> <br>
+
+                &nbsp;&nbsp;&nbsp;max = b <br> <br>
+
+            } <br> <br>
+
+            // As expression <br> <br>
+
+            <font color="#0037b3">val</font> max = <font color="#0037b3">if</font> (a > b) a <font color="#0037b3">else</font> b <br> <br>
+
+            <p>if branches can be blocks, and the last expression is the value of a block:</p>
+
+            <font color="#0037b3">val</font> max = if (a > b) { <br> <br>
+
+                &nbsp;&nbsp;&nbsp;print(<font color="#4ed297">\"Choose a\"</font>) <br> <br>
+
+                &nbsp;&nbsp;&nbsp;a <br> <br>
+
+            } <font color="#0037b3">else</font> { <br> <br>
+
+                &nbsp;&nbsp;&nbsp;print(<font color="#4ed297">\"Choose b\"</font>) <br> <br>
+
+                &nbsp;&nbsp;&nbsp;b <br> <br>
+
+            } <br> <br>
+
+            <p>If you\'re using if as an expression rather than a statement (for example,
+            returning its value or assigning it to a variable), the expression is required to have an else branch.</p>
+
+            See the grammar for 
+
+            <a href=“HHHH”>LLLLL</a>
+
+            <font color="#0037b3">if</font> - https://kotlinlang.org/docs/reference/grammar.html#if <br> <br>
+
+            <h4>When Expression</h4>
+
+            <p>when replaces the switch operator of C-like languages. In the simplest form it looks like this</p>
+
+            <font color="#0037b3">when</font> (x) { <br> <br>
+
+                &nbsp;&nbsp;&nbsp;1 -> print(<font color="#4ed297">\"x == 1\"</font>) <br> <br>
+
+                &nbsp;&nbsp;&nbsp;2 -> print(<font color="#4ed297">\"x == 2\"</font>) <br> <br>
+
+                &nbsp;&nbsp;&nbsp;<font color="#0037b3">else</font> -> { // Note the block <br> <br>
+
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(<font color="#4ed297">\"x is neither 1 nor 2\"</font>) <br> <br>
+
+                &nbsp;&nbsp;&nbsp;} <br> <br>
+
+            } <br> <br>
+
+            <p>when matches its argument against all branches sequentially until some branch condition is satisfied. 
+            whencan be used either as an expression or as a statement. If it is used as an expression,
+            the value of the satisfied branch becomes the value of the overall expression. If it is used as a statement,
+            the values of individual branches are ignored. (Just like with if, each branch can be a block,
+            and its value is the value of the last expression in the block.)</p>
+
+            <p>The else branch is evaluated if none of the other branch conditions are satisfied.
+            If when is used as an expression, the else branch is mandatory, unless the compiler can
+            prove that all possible cases are covered with branch conditions.</p>
+
+            <p>If many cases should be handled in the same way, the branch conditions may be combined with a comma:</p>
+
+            <font color="#0037b3">when</font> (x) { <br> <br>
+
+                &nbsp;&nbsp;&nbsp;0, 1 -> print(<font color="#4ed297">\"x == 0 or x == 1\"</font>) <br> <br>
+
+                &nbsp;&nbsp;&nbsp;else -> print(<font color="#4ed297">\"otherwise\"</font>) <br> <br>
+
+
+            } <br> <br>
+
+            <p>We can use arbitrary expressions (not only constants) as branch conditions</p>
+
+            <font color="#0037b3">when</font> (x) { <br> <br>
+
+                &nbsp;&nbsp;&nbsp;parseInt(s) -> print(<font color="#4ed297">\"s encodes x\"</font>) <br> <br>
+
+                &nbsp;&nbsp;&nbsp;<font color="#0037b3">else</font> -> print(<font color="#4ed297">\"s does not encode x\"</font>) <br> <br>
+
+            } <br> <br>
+
+            <p>We can also check a value for being in or !in a 
+
+            <a href=“https://kotlinlang.org/docs/reference/ranges.html”>range</a> or a collection:
+             </p>
+
+            <font color="#0037b3">when</font> (x) { <br> <br>
+
+                &nbsp;&nbsp;&nbsp;in 1..10 -> print(<font color="#4ed297">\"x is in the range\"</font>) <br> <br>
+
+                &nbsp;&nbsp;&nbsp;in validNumbers -> print(<font color="#4ed297">\"x is valid\"</font>) <br> <br>
+
+                &nbsp;&nbsp;&nbsp;!in 10..20 -> print("x is outside the range") <br> <br>
+
+                &nbsp;&nbsp;&nbsp;<font color="#0037b3">else</font> -> print(<font color="#4ed297">\"none of the above\"</font>) <br> <br>
+
+            } <br> <br>
+
+            <p>
+
+                Another possibility is to check that a value is or !is of a particular type. Note that,
+                due to <a href=“https://kotlinlang.org/docs/reference/typecasts.html#smart-casts”>smart casts</a>, you can access
+                the methods and properties of the type without any extra checks.
+
+            </p>
+
+            <font color="#0037b3">fun</font> hasPrefix(x: Any) = when(x) { <br> <br>
+
+                &nbsp;&nbsp;&nbsp;is String -> x.startsWith(<font color="#4ed297">\"prefix\"</font>) <br> <br>
+
+                &nbsp;&nbsp;&nbsp;<font color="#0037b3">else</font> -> false <br> <br>
+
+            } <br> <br>
+
+            <p>when can also be used as a replacement for an if-else if chain. If no argument is supplied,
+            the branch conditions are simply boolean expressions, and a branch is executed when its condition is true:</p>
+
+            <font color="#0037b3">when</font> { <br> <br>
+
+                &nbsp;&nbsp;&nbsp;x.isOdd() -> print(<font color="#4ed297">\"x is odd\"</font>) <br> <br>
+
+                &nbsp;&nbsp;&nbsp;x.isEven() -> print(<font color="#4ed297">\"x is even\"</font>) <br> <br>
+
+                &nbsp;&nbsp;&nbsp;<font color="#0037b3">else</font> -> print(<font color="#4ed297">\"x is funny\"</font>) <br> <br>
+
+            } <br> <br>
+
+            <p>
+                See the <a href=“https://kotlinlang.org/docs/reference/grammar.html#when”>grammar for when</a>
+            </p>
+
+            <h4>For Loops</h4>
+
+            <p><font color="#0037b3">for</font> loop iterates through anything that provides an iterator.
+            The syntax is as follows:</p>
+
+            <font color="#0037b3">for</font> (item in collection) print(item) <br> <br>
+
+            <p>The body can be a block.</p>
+
+            <font color="#0037b3">for</font> (item: Int in ints) { <br> <br>
+
+                &nbsp;&nbsp;&nbsp;// - - - <br> <br>
+
+            } <br> <br>
+
+            <p>As mentioned before, for iterates through anything that provides an iterator, i.e.</p>
+                    <p>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;has a member- or extension-function iterator(), whose return type
+
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;has a member- or extension-function next(), and
+
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;has a member- or extension-function hasNext() that returns Boolean.
+
+                    </p>
+
+            <p>All of these three functions need to be marked as operator.</p>
+
+            <p>A for loop over an array is compiled to an index-based loop that does not create an iterator object.</p>
+
+            <p>If you want to iterate through an array or a list with an index, you can do it this way:</p>
+
+            <font color="#0037b3">for</font> (i in array.indices) { <br> <br>
+
+                &nbsp;&nbsp;&nbsp;print(array[i]) <br> <br>
+
+            } <br> <br>
+
+            <p>Note that this \"iteration through a range\" is compiled down to optimal implementation with no extra objects created.</p>
+
+            <p>Alternatively, you can use the withIndex library function:</p>
+
+            <font color="#0037b3">for</font> ((index, value) in array.withIndex()) { <br> <br>
+
+                &nbsp;&nbsp;&nbsp;println(<font color="#4ed297">\"the element at $index is $value\"</font>) <br> <br>
+
+            } <br> <br>
+
+            <p>
+                See the <a href=“https://kotlinlang.org/docs/reference/grammar.html#for”>grammar for <font color="#0037b3">for</font></a>
+            </p>
+
+            <h4>While Loops</h4>
+
+            <p><font color="#0037b3">while</font> and <font color="#0037b3">do..while</font> work as usual</p>
+
+            <font color="#0037b3">while</font> (x > 0) { <br> <br>
+
+                &nbsp;&nbsp;&nbsp;x"--" <br> <br>
+
+            } <br> <br>
+
+            <font color="#0037b3">do</font> { <br> <br>
+
+                &nbsp;&nbsp;&nbsp;<font color="#0037b3">val</font> y = retrieveData() <br> <br>
+
+            } <font color="#0037b3">while</font> (y != null) // y is visible here! <br> <br>
+
+            <p>
+                See the <a href=“https://kotlinlang.org/docs/reference/grammar.html#while”>grammar for while</a>
+            </p>
+
+            <h4>Break and continue in loops</h4>
+
+            <p>Kotlin supports traditional <font color="#0037b3">break</font> and <font color="#0037b3">continue</font> operators in loops.
+            See 
+
+            <a href=“https://kotlinlang.org/docs/reference/returns.html”>Returns and jumps</a>.</p>
+
+         ]]>
+    </string>
+
+    <string name="topicContentReturnsandJumps">
+         <![CDATA[
+
+            <h3>Returns and Jumps</h3>
+
+            <p>Kotlin has three structural jump expressions:</p>
+
+            <p>
+                    <font color="#0037b3">- return</font>. By default returns from the nearest enclosing function or 
+                    <a href=“https://kotlinlang.org/docs/reference/lambdas.html#anonymous-functions”>anonymous function.</a>
+                    </p>
+                    <p>
+                    <font color="#0037b3">- break</font>. Terminates the nearest enclosing loop.
+                    </p>
+                    <p>
+                    <font color="#0037b3">- continue</font>. Proceeds to the next step of the nearest enclosing loop.
+                    </p>
+                    <p>
+            All of these expressions can be used as part of larger expressions:
+            </p>
+                    <p>
+            <font color="#0037b3">val</font> s = person.name ?: <font color="#0037b3">return</font>
+            </p>
+                    <p>
+            The type of these expressions is the 
+
+            <a href=“https://kotlinlang.org/docs/reference/exceptions.html#the-nothing-type”>Nothing type</a>
+            </p>
+
+            <h4>Break and Continue Labels</h4>
+                    <p>
+            Any expression in Kotlin may be marked with a <font color="#0037b3">label</font>. Labels have the form of an identifier followed by the @ sign, for example: abc@, fooBar@ 
+            are valid labels (see the
+
+            <a href=“https://kotlinlang.org/docs/reference/grammar.html#labelReference”><font color="#0037b3">grammar</font> </a>.
+            To label an expression, we just put a label in front of it
+            </p>
+
+            loop@ <font color="#0037b3">for</font> (i <font color="#0037b3">in 1..100</font>) { <br> <br>
+
+                &nbsp;&nbsp;&nbsp;// ... <br> <br>
+
+            } <br> <br>
+
+
+            <p>Now, we can qualify a <font color="#0037b3">break</font> or a <font color="#0037b3">continue</font> with a label:</p>
+
+            loop@ <font color="#0037b3">for</font> (i <font color="#0037b3">in 1..100</font>) { <br> <br>
+
+                &nbsp;&nbsp;&nbsp;<font color="#0037b3">for</font> (j <font color="#0037b3">in 1..100</font>) { <br> <br>
+
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0037b3">if</font> (...) <font color="#0037b3">break</font>@loop <br> <br>
+
+                &nbsp;&nbsp;&nbsp;} <br> <br>
+
+            } <br> <br>
+
+            <p>
+            A <font color="#0037b3">break</font> qualified with a label jumps to the execution point right after the loop marked with that label. A <font color="#0037b3">continue</font> proceeds to the next iteration of that loop.</p>
+
+            <h4>Return at Labels</h4>
+
+            <p>
+            With function literals, local functions and object expression, functions can be nested in Kotlin. Qualified <font color="#0037b3">return</font>s allow us to return from an outer function. The most important use case is returning from a lambda expression. Recall that when we write this:</p>
+
+            <font color="#0037b3">fun</font> foo() { <br> <br>
+
+                &nbsp;&nbsp;&nbsp;ints.forEach { <br> <br>
+
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0037b3">if</font> (it == <font color="#0037b3">0</font>) <font color="#0037b3">return</font>  // nonlocal return from inside lambda directly to the caller of foo() <br> <br>
+
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(it) <br> <br>
+
+                &nbsp;&nbsp;&nbsp;} <br> <br>
+
+            } <br> <br>
+
+            <p>
+            The <font color="#0037b3">return</font>-expression returns from the nearest enclosing function, i.e. foo.
+            (Note that such non-local returns are supported only for lambda expressions passed to 
+
+            <a href=“https://kotlinlang.org/docs/reference/inline-functions.html”>inline functions)</a>.
+            If we need to return from a lambda expression, we have to label it and qualify the font color="#0037b3">return</font>:
+            </p>
+
+            <font color="#0037b3">fun</font> foo() { <br> <br>
+
+                &nbsp;&nbsp;&nbsp;ints.forEach lit@ { <br> <br>
+
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0037b3">if</font> (it == <font color="#0037b3">0</font>) font color="#0037b3">return</font>@lit <br> <br>
+
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(it) <br> <br>
+
+                &nbsp;&nbsp;&nbsp;} <br> <br>
+
+            } <br> <br>
+
+            <p>Now, it returns only from the lambda expression. Oftentimes it is more convenient to use implicits labels: such a label has the same name as the function to which the lambda is passed.</p>
+
+            <font color="#0037b3">fun</font> foo() { <br> <br>
+
+                &nbsp;&nbsp;&nbsp;ints.forEach { <br> <br>
+
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#0037b3">if</font> (it == <font color="#0037b3">0</font>) <font color="#0037b3">return</font>@forEach <br> <br>
+
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(it) <br> <br>
+
+                &nbsp;&nbsp;&nbsp;} <br> <br>
+
+            } <br> <br>
+
+            <p>
+            Alternatively, we can replace the lambda expression with an 
+            <a href=“https://kotlinlang.org/docs/reference/lambdas.html#anonymous-functions”>anonymous function</a>.
+            A return statement in an anonymous function will return from the anonymous function itself.</p>
+
+            <font color="#0037b3">fun</font> foo() { <br> <br>
+
+                &nbsp;&nbsp;&nbsp;ints.forEach(<font color="#0037b3">fun</font>(value: Int) { <br> <br>
+
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (value == <font color="#0037b3">0</font>) <font color="#0037b3">return</font>  // local return to the caller of the anonymous fun, i.e. the forEach loop <br> <br>
+
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print(value) <br> <br>
+
+                &nbsp;&nbsp;&nbsp;}) <br> <br>
+
+            } <br> <br>
+
+            <p>When returning a value, the parser gives preference to the qualified return, i.e.</p>
+
+            <font color="#0037b3">return</font>@a <font color="#0037b3">1</font> <br> <br>
+
+            <p>means \"return 1 at label @a\" and not \"return a labeled expression (@a 1)\".</p>
+
+
+         ]]>
+    </string>
+
+</resources>

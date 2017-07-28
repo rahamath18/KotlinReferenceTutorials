@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="contentAppIntroduction">
+         <![CDATA[
+
+            This app is for Kotlin reference + tutorials.
+            This app is developed and code written in kotlin programming language using android studio 3.
+
+         ]]>
+     </string>
+
+    <string name="contentAboutAppSection">
+         <![CDATA[
+
+            <h2>Kotlin reference + tutorials</h2><br>
+
+            <p>
+                 This app provides a reference and tutorials to Kotlin programming language. <br> <br>
+
+                 For further explore and read <br> <br>
+
+                 - <a href=“https://kotlinlang.org/docs/reference/“>Kotlin language reference</a> <br> <br>
+
+                 - <a href=“https://kotlinlang.org/docs/tutorials/“>Kotlin language tutorials</a> <br> <br>
+
+                 - <a href="https://kotlinlang.org/api/latest/jvm/stdlib/index.html">Standard library</a> <br> <br>
+
+                 - <a href=“http://try.kotlinlang.org/”>online IDE</a> <br> <br>
+
+                 - <a href=“https://kotlinlang.org/docs/reference/idioms.html”>Kotlin idioms</a> <br> <br>
+
+                 - <a href=“https://kotlinlang.org/docs/kotlin-docs.pdf”>
+                 You can download the entire reference documentation as a single PDF file</a> <br> <br>
+            </p>
+
+         ]]>
+     </string>
+
+</resources>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/SCROLLER_ID2"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:scrollbars="vertical"
+android:fillViewport="true"
+app:layout_behavior="@string/appbar_scrolling_view_behavior"
+tools:context="com.test.kotlintutorial.ClassesandObjectsActivity"
+tools:showIn="@layout/activity_classesand_objects"
+    android:background="@drawable/kotlingalexybg">
+
+<android.support.constraint.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/txtTopicClassesandObjects"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/topicClassesandObject"
+        android:textAllCaps="false"
+        android:textColor="@color/colorForTxt002"
+        tools:layout_editor_absoluteX="4dp"
+        tools:layout_editor_absoluteY="5dp" />
+
+    <Button
+        android:id="@+id/btnClassesandInheritance"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="@string/labelClassesandInheritance"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
+        android:background="@color/colorLightBlue"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/txtTopicClassesandObjects"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/btnPropertiesandFields"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="@string/labelPropertiesandFields"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
+        android:background="@color/colorLightBlue"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnClassesandInheritance"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/btnInterfaces"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="@string/labelInterfaces"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
+        android:background="@color/colorLightBlue"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnPropertiesandFields"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/btnVisibilityModifiers"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="@string/labelVisibilityModifiers"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
+        android:background="@color/colorLightBlue"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnInterfaces"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/btnExtensions"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="@string/labelExtensions"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
+        android:background="@color/colorLightBlue"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnVisibilityModifiers"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/btnDataClasses"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="@string/labelDataClasses"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
+        android:background="@color/colorLightBlue"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnExtensions"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/btnSealedClasses"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="@string/labelSealedClasses"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
+        android:background="@color/colorLightBlue"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnDataClasses"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/btnGenerics"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="@string/labelGenerics"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
+        android:background="@color/colorLightBlue"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnSealedClasses"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/btnNestedClasses"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="@string/labelNestedClasses"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
+        android:background="@color/colorLightBlue"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnGenerics"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/btnEnumClasses"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="@string/labelEnumClasses"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
+        android:background="@color/colorLightBlue"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnNestedClasses"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/btnObjects"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="@string/labelObjects"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
+        android:background="@color/colorLightBlue"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnEnumClasses"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/btnDelegation"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="@string/labelDelegation"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
+        android:background="@color/colorLightBlue"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnObjects"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/btnDelegatedProperties"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="@string/labelDelegatedProperties"
+        android:textAllCaps="false"
+        android:gravity="left|center_vertical"
+        android:background="@color/colorLightBlue"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnDelegation"
+        android:layout_marginTop="5dp"/>
+
+</android.support.constraint.ConstraintLayout>
+</ScrollView>

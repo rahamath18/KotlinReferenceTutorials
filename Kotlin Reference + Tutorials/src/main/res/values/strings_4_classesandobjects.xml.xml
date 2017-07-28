@@ -1,0 +1,3140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string name="labelClasses"> 4. Classes and Objects</string>
+
+    <string name="labelClassesandInheritance">4.1 Classes and Inheritance</string>
+    <string name="labelPropertiesandFields">4.2 Properties and Fields</string>
+    <string name="labelInterfaces">4.3 Interfaces</string>
+    <string name="labelVisibilityModifiers">4.4 Visibility Modifiers</string>
+    <string name="labelExtensions">4.5 Extensions</string>
+    <string name="labelDataClasses">4.6 Data Classes</string>
+    <string name="labelSealedClasses">4.7 Sealed Classes</string>
+    <string name="labelGenerics">4.8 Generics</string>
+    <string name="labelNestedClasses">4.9 Nested Classes</string>
+    <string name="labelEnumClasses">4.10 Enum Classes</string>
+    <string name="labelObjects">4.11 Objects</string>
+    <string name="labelDelegation">4.12 Delegation</string>
+    <string name="labelDelegatedProperties">4.13 Delegated Properties</string>
+
+	<string name="topicClassesandObject">
+         <![CDATA[
+
+                Classes and Objects
+
+         ]]>
+     </string>
+
+	<string name="topicContentClassesandInheritance">
+		<![CDATA[
+
+ 			<h1 dir="ltr">
+				Classes and Inheritance
+			</h1>
+			<h2 dir="ltr">
+				Classes
+			</h2>
+			<p dir="ltr">
+				Classes in Kotlin are declared using the keyword class:
+			</p>
+			<p dir="ltr">
+				class Invoice {
+				<br/>
+				}
+				<br/>
+				<br/>
+			</p>
+			<p dir="ltr">
+				The class declaration consists of the class name, the class header
+				(specifying its type parameters, the primary constructor etc.) and the
+				class body, surrounded by curly braces. Both the header and the body are
+				optional; if the class has no body, curly braces can be omitted.
+			</p>
+			<p dir="ltr">
+				class Empty
+				<br/>
+				<br/>
+			</p>
+			<h3 dir="ltr">
+				Constructors
+			</h3>
+			<p dir="ltr">
+				A class in Kotlin can have a primary constructor and one or more secondary
+				constructors. The primary constructor is part of the class header: it goes
+				after the class name (and optional type parameters).
+			</p>
+			<p dir="ltr">
+				class Person constructor(firstName: String) {
+				<br/>
+				}
+				<br/>
+				<br/>
+			</p>
+			<p dir="ltr">
+				If the primary constructor does not have any annotations or visibility
+				modifiers, the constructor keyword can be omitted:
+			</p>
+			<p dir="ltr">
+				class Person(firstName: String) {
+				<br/>
+				}
+				<br/>
+				<br/>
+			</p>
+			<p dir="ltr">
+				The primary constructor cannot contain any code. Initialization code can be
+				placed in initializer blocks, which are prefixed with the init keyword:
+			</p>
+			<p dir="ltr">
+				class Customer(name: String) {
+				<br/>
+				init {
+				<br/>
+				logger.info("Customer initialized with value ${name}")
+				<br/>
+				}
+				<br/>
+				}
+				<br/>
+				<br/>
+			</p>
+			<p dir="ltr">
+				Note that parameters of the primary constructor can be used in the
+				initializer blocks. They can also be used in property initializers declared
+				in the class body:
+			</p>
+			<p dir="ltr">
+				class Customer(name: String) {
+				<br/>
+				val customerKey = name.toUpperCase()
+				<br/>
+				}
+				<br/>
+				<br/>
+			</p>
+			<p dir="ltr">
+				In fact, for declaring properties and initializing them from the primary
+				constructor, Kotlin has a concise syntax:
+			</p>
+			<p dir="ltr">
+				class Person(val firstName: String, val lastName: String, var age: Int) {
+				<br/>
+				// ...
+				<br/>
+				}
+				<br/>
+				<br/>
+			</p>
+			<p dir="ltr">
+				Much the same way as regular properties, the properties declared in the
+				primary constructor can be mutable (var) or read-only (val).
+			</p>
+			<p dir="ltr">
+				If the constructor has annotations or visibility modifiers, the constructor
+				keyword is required, and the modifiers go before it:
+			</p>
+			<p dir="ltr">
+				class Customer public @Inject constructor(name: String) { ... }
+				<br/>
+				<br/>
+			</p>
+			<p dir="ltr">
+				For more details, see
+				<a
+					href="https://kotlinlang.org/docs/reference/visibility-modifiers.html#constructors"
+				>
+					Visibility Modifiers
+				</a>
+				.
+			</p>
+			<h4 dir="ltr">
+				Secondary Constructors
+			</h4>
+			<p dir="ltr">
+				The class can also declare secondary constructors, which are prefixed with
+				constructor:
+			</p>
+			<p dir="ltr">
+				class Person {
+				<br/>
+				constructor(parent: Person) {
+				<br/>
+				parent.children.add(this)
+				<br/>
+				}
+				<br/>
+				}
+				<br/>
+				<br/>
+			</p>
+			<p dir="ltr">
+				If the class has a primary constructor, each secondary constructor needs to
+				delegate to the primary constructor, either directly or indirectly through
+				another secondary constructor(s). Delegation to another constructor of the
+				same class is done using the this keyword:
+			</p>
+			<p dir="ltr">
+				class Person(val name: String) {
+				<br/>
+				constructor(name: String, parent: Person) : this(name) {
+				<br/>
+				parent.children.add(this)
+				<br/>
+				}
+				<br/>
+				}
+				<br/>
+				<br/>
+			</p>
+			<p dir="ltr">
+				If a non-abstract class does not declare any constructors (primary or
+				secondary), it will have a generated primary constructor with no arguments.
+				The visibility of the constructor will be public. If you do not want your
+				class to have a public constructor, you need to declare an empty primary
+				constructor with non-default visibility:
+			</p>
+			<p dir="ltr">
+				class DontCreateMe private constructor () {
+				<br/>
+				}
+				<br/>
+				<br/>
+			</p>
+			<p dir="ltr">
+				NOTE: On the JVM, if all of the parameters of the primary constructor have
+				default values, the compiler will generate an additional parameterless
+				constructor which will use the default values. This makes it easier to use
+				Kotlin with libraries such as Jackson or JPA that create class instances
+				through parameterless constructors.
+			</p>
+			<p dir="ltr">
+				class Customer(val customerName: String = "")
+				<br/>
+				<br/>
+			</p>
+			<h3 dir="ltr">
+				Creating instances of classes
+			</h3>
+			<p dir="ltr">
+				To create an instance of a class, we call the constructor as if it were a
+				regular function:
+			</p>
+			<p dir="ltr">
+				val invoice = Invoice()
+				<br/>
+				<br/>
+				val customer = Customer("Joe Smith")
+				<br/>
+				<br/>
+			</p>
+			<p dir="ltr">
+				Note that Kotlin does not have a new keyword.
+			</p>
+			<p dir="ltr">
+				Creating instances of nested, inner and anonymous inner classes is
+				described in
+				<a href="https://kotlinlang.org/docs/reference/nested-classes.html">
+					Nested classes
+				</a>
+				.
+			</p>
+			<h3 dir="ltr">
+				Class Members
+			</h3>
+			<p dir="ltr">
+				Classes can contain
+			</p>
+			<ul>
+				<li dir="ltr">
+					<p dir="ltr">
+						Constructors and initializer blocks
+					</p>
+				</li>
+				<li dir="ltr">
+					<p dir="ltr">
+						<a href="https://kotlinlang.org/docs/reference/functions.html">
+							Functions
+						</a>
+					</p>
+				</li>
+				<li dir="ltr">
+					<p dir="ltr">
+						<a href="https://kotlinlang.org/docs/reference/properties.html">
+							Properties
+						</a>
+					</p>
+				</li>
+				<li dir="ltr">
+					<p dir="ltr">
+						<a href="https://kotlinlang.org/docs/reference/nested-classes.html">
+							Nested and Inner Classes
+						</a>
+					</p>
+				</li>
+				<li dir="ltr">
+					<p dir="ltr">
+						<a
+							href="https://kotlinlang.org/docs/reference/object-declarations.html"
+						>
+							Object Declarations
+						</a>
+					</p>
+				</li>
+			</ul>
+			<h2 dir="ltr">
+				Inheritance
+			</h2>
+			<p dir="ltr">
+				All classes in Kotlin have a common superclass Any, that is a default super
+				for a class with no supertypes declared:
+			</p>
+			<p dir="ltr">
+				class Example // Implicitly inherits from Any
+				<br/>
+				<br/>
+			</p>
+			<p dir="ltr">
+				Any is not java.lang.Object; in particular, it does not have any members
+				other than equals(), hashCode() and toString(). Please consult the
+				<a
+					href="https://kotlinlang.org/docs/reference/java-interop.html#object-methods"
+				>
+					Java interoperability
+				</a>
+				section for more details.
+			</p>
+			<p dir="ltr">
+				To declare an explicit supertype, we place the type after a colon in the
+				class header:
+			</p>
+			<p dir="ltr">
+				open class Base(p: Int)
+				<br/>
+				<br/>
+				class Derived(p: Int) : Base(p)
+				<br/>
+				<br/>
+			</p>
+			<p dir="ltr">
+				If the class has a primary constructor, the base type can (and must) be
+				initialized right there, using the parameters of the primary constructor.
+			</p>
+			<p dir="ltr">
+				If the class has no primary constructor, then each secondary constructor
+				has to initialize the base type using the super keyword, or to delegate to
+				another constructor which does that. Note that in this case different
+				secondary constructors can call different constructors of the base type:
+			</p>
+			<p dir="ltr">
+				class MyView : View {
+				<br/>
+				constructor(ctx: Context) : super(ctx)
+				<br/>
+				<br/>
+				constructor(ctx: Context, attrs: AttributeSet) : super(ctx, attrs)
+				<br/>
+				}
+				<br/>
+				<br/>
+			</p>
+			<p dir="ltr">
+				The open annotation on a class is the opposite of Java\'s final: it allows
+				others to inherit from this class. By default, all classes in Kotlin are
+				final, which corresponds to
+				<a href="http://www.oracle.com/technetwork/java/effectivejava-136174.html">
+					Effective Java
+				</a>
+				, Item 17: Design and document for inheritance or else prohibit it.
+			</p>
+			<h3 dir="ltr">
+				Overriding Methods
+			</h3>
+			<p dir="ltr">
+				As we mentioned before, we stick to making things explicit in Kotlin. And
+				unlike Java, Kotlin requires explicit annotations for overridable members
+				(we call them open) and for overrides:
+			</p>
+			<p dir="ltr">
+				open class Base {
+				<br/>
+				open fun v() {}
+				<br/>
+				fun nv() {}
+				<br/>
+				}
+				<br/>
+				class Derived() : Base() {
+				<br/>
+				override fun v() {}
+				<br/>
+				}
+				<br/>
+				<br/>
+			</p>
+			<p dir="ltr">
+				The override annotation is required for Derived.v(). If it were missing,
+				the compiler would complain. If there is no open annotation on a function,
+				like Base.nv(), declaring a method with the same signature in a subclass is
+				illegal, either with override or without it. In a final class (e.g. a class
+				with no open annotation), open members are prohibited.
+			</p>
+			<p dir="ltr">
+				A member marked override is itself open, i.e. it may be overridden in
+				subclasses. If you want to prohibit re-overriding, use final:
+			</p>
+			<p dir="ltr">
+				open class AnotherDerived() : Base() {
+				<br/>
+				final override fun v() {}
+				<br/>
+				}
+				<br/>
+				<br/>
+			</p>
+			<h3 dir="ltr">
+				Overriding Properties
+			</h3>
+			<p dir="ltr">
+				Overriding properties works in a similar way to overriding methods;
+				properties declared on a superclass that are then redeclared on a derived
+				class must be prefaced with override, and they must have a compatible type.
+				Each declared property can be overridden by a property with an initializer
+				or by a property with a getter method.
+			</p>
+			<p dir="ltr">
+				open class Foo {
+				<br/>
+				open val x: Int get { ... }
+				<br/>
+				}
+				<br/>
+				<br/>
+				class Bar1 : Foo() {
+				<br/>
+				override val x: Int = ...
+				<br/>
+				}
+				<br/>
+				<br/>
+			</p>
+			<p dir="ltr">
+				You can also override a val property with a var property, but not vice
+				versa. This is allowed because a val property essentially declares a getter
+				method, and overriding it as a var additionally declares a setter method in
+				the derived class.
+			</p>
+			<p dir="ltr">
+				Note that you can use the override keyword as part of the property
+				declaration in a primary constructor.
+			</p>
+			<p dir="ltr">
+				interface Foo {
+				<br/>
+				val count: Int
+				<br/>
+				}
+				<br/>
+				<br/>
+				class Bar1(override val count: Int) : Foo
+				<br/>
+				<br/>
+				class Bar2 : Foo {
+				<br/>
+				override var count: Int = 0
+				<br/>
+				}
+				<br/>
+				<br/>
+			</p>
+			<h3 dir="ltr">
+				Overriding Rules
+			</h3>
+			<p dir="ltr">
+				In Kotlin, implementation inheritance is regulated by the following rule:
+				if a class inherits many implementations of the same member from its
+				immediate superclasses, it must override this member and provide its own
+				implementation (perhaps, using one of the inherited ones). To denote the
+				supertype from which the inherited implementation is taken, we use super
+				qualified by the supertype name in angle brackets, e.g. super&lt;Base&gt;:
+			</p>
+			<p dir="ltr">
+				open class A {
+				<br/>
+				open fun f() { print("A") }
+				<br/>
+				fun a() { print("a") }
+				<br/>
+				}
+				<br/>
+				<br/>
+				interface B {
+				<br/>
+				fun f() { print("B") } // interface members are \'open\' by default
+				<br/>
+				fun b() { print("b") }
+				<br/>
+				}
+				<br/>
+				<br/>
+				class C() : A(), B {
+				<br/>
+				// The compiler requires f() to be overridden:
+				<br/>
+				override fun f() {
+				<br/>
+				super&lt;A&gt;.f() // call to A.f()
+				<br/>
+				super&lt;B&gt;.f() // call to B.f()
+				<br/>
+				}
+				<br/>
+				}
+				<br/>
+				<br/>
+			</p>
+			<p dir="ltr">
+				It\'s fine to inherit from both A and B, and we have no problems with a()
+				and b() since C inherits only one implementation of each of these
+				functions. But for f() we have two implementations inherited by C, and thus
+				we have to override f() in C and provide our own implementation that
+				eliminates the ambiguity.
+			</p>
+			<h2 dir="ltr">
+				Abstract Classes
+			</h2>
+			<p dir="ltr">
+				A class and some of its members may be declared abstract. An abstract
+				member does not have an implementation in its class. Note that we do not
+				need to annotate an abstract class or function with open – it goes without
+				saying.
+			</p>
+			<p dir="ltr">
+				We can override a non-abstract open member with an abstract one
+			</p>
+			<p dir="ltr">
+				open class Base {
+				<br/>
+				open fun f() {}
+				<br/>
+				}
+				<br/>
+				<br/>
+				abstract class Derived : Base() {
+				<br/>
+				override abstract fun f()
+				<br/>
+				}
+				<br/>
+				<br/>
+			</p>
+			<h2 dir="ltr">
+				Companion Objects
+			</h2>
+			<p dir="ltr">
+				In Kotlin, unlike Java or C#, classes do not have static methods. In most
+				cases, it\'s recommended to simply use package-level functions instead.
+			</p>
+			<p dir="ltr">
+				If you need to write a function that can be called without having a class
+				instance but needs access to the internals of a class (for example, a
+				factory method), you can write it as a member of an
+				<a href="https://kotlinlang.org/docs/reference/object-declarations.html">
+					object declaration
+				</a>
+				inside that class.
+			</p>
+			<p dir="ltr">
+				Even more specifically, if you declare a
+				<a
+					href="https://kotlinlang.org/docs/reference/object-declarations.html#companion-objects"
+				>
+					companion object
+				</a>
+				inside your class, you\'ll be able to call its members with the same syntax
+				as calling static methods in Java/C#, using only the class name as a
+				qualifier.
+			</p>
+
+
+		]]>
+	</string>
+
+	<string name="topicContentPropertiesandFields">
+		<![CDATA[
+
+ 			<h1 id="properties-and-fields">
+				Properties and Fields
+				<a
+					href="https://kotlinlang.org/docs/reference/properties.html#properties-and-fields"
+				>
+				</a>
+			</h1>
+			<h2 id="declaring-properties">
+				Declaring Properties
+				<a
+					href="https://kotlinlang.org/docs/reference/properties.html#declaring-properties"
+				>
+				</a>
+			</h2>
+			<p>
+				Classes in Kotlin can have properties. These can be declared as mutable,
+				using the var keyword or read-only using the val keyword.
+			</p>
+			<pre><code>class Address {
+				var name: String = ...
+				var street: String = ...
+				var city: String = ...
+				var state: String? = ...
+				var zip: String = ...
+			}
+			</code></pre>
+			<p>
+				To use a property, we simply refer to it by name, as if it were a field in
+				Java:
+			</p>
+			<pre><code>fun copyAddress(address: Address): Address {
+				val result = Address() // there\'s no \'new\' keyword in Kotlin
+				result.name = address.name // accessors are called
+				result.street = address.street
+				// ...
+				return result
+			}
+			</code></pre>
+			<h2 id="getters-and-setters">
+				Getters and Setters
+				<a
+					href="https://kotlinlang.org/docs/reference/properties.html#getters-and-setters"
+				>
+				</a>
+			</h2>
+			<p>
+				The full syntax for declaring a property is
+			</p>
+			<pre><code>var &lt;propertyName&gt;[: &lt;PropertyType&gt;] [= &lt;property_initializer&gt;]
+				[&lt;getter&gt;]
+				[&lt;setter&gt;]
+			</code></pre>
+			<p>
+				The initializer, getter and setter are optional. Property type is optional
+				if it can be inferred from the initializer (or from the getter return type,
+				as shown below).
+			</p>
+			<p>
+				Examples:
+			</p>
+			<pre><code>var allByDefault: Int? // error: explicit initializer required, default getter and setter implied
+			var initialized = 1 // has type Int, default getter and setter
+			</code></pre>
+			<p>
+				The full syntax of a read-only property declaration differs from a mutable
+				one in two ways: it starts with <code>val</code>instead of <code>var</code>
+				and does not allow a setter:
+			</p>
+			<pre><code>val simple: Int? // has type Int, default getter, must be initialized in constructor
+			val inferredType = 1 // has type Int and a default getter
+			</code></pre>
+			<p>
+				We can write custom accessors, very much like ordinary functions, right
+				inside a property declaration. Here\'s an example of a custom getter:
+			</p>
+			<pre><code>val isEmpty: Boolean
+				get() = this.size == 0
+			</code></pre>
+			<p>
+				A custom setter looks like this:
+			</p>
+			<pre><code>var stringRepresentation: String
+				get() = this.toString()
+				set(value) {
+					setDataFromString(value) // parses the string and assigns values to other properties
+				}
+			</code></pre>
+			<p>
+				By convention, the name of the setter parameter is <code>value</code>, but
+				you can choose a different name if you prefer.
+			</p>
+			<p>
+				Since Kotlin 1.1, you can omit the property type if it can be inferred from
+				the getter:
+			</p>
+			<pre><code>val isEmpty get() = this.size == 0  // has type Boolean
+			</code></pre>
+			<p>
+				If you need to change the visibility of an accessor or to annotate it, but
+				don\'t need to change the default implementation, you can define the
+				accessor without defining its body:
+			</p>
+			<pre><code>var setterVisibility: String = "abc"
+				private set // the setter is private and has the default implementation
+
+			var setterWithAnnotation: Any? = null
+				@Inject set // annotate the setter with Inject
+			</code></pre>
+			<h3 id="backing-fields">
+				Backing Fields
+				<a
+					href="https://kotlinlang.org/docs/reference/properties.html#backing-fields"
+				>
+				</a>
+			</h3>
+			<p>
+				Classes in Kotlin cannot have fields. However, sometimes it is necessary to
+				have a backing field when using custom accessors. For these purposes,
+			Kotlin provides an automatic backing field which can be accessed using the    <code>field</code> identifier:
+			</p>
+			<pre><code>var counter = 0 // the initializer value is written directly to the backing field
+				set(value) {
+					if (value &gt;= 0) field = value
+				}
+			</code></pre>
+			<p>
+				The <code>field</code> identifier can only be used in the accessors of the
+				property.
+			</p>
+			<p>
+				A backing field will be generated for a property if it uses the default
+				implementation of at least one of the accessors, or if a custom accessor
+				references it through the <code>field</code> identifier.
+			</p>
+			<p>
+				For example, in the following case there will be no backing field:
+			</p>
+			<pre><code>val isEmpty: Boolean
+				get() = this.size == 0
+			</code></pre>
+			<h3 id="backing-properties">
+				Backing Properties
+				<a
+					href="https://kotlinlang.org/docs/reference/properties.html#backing-properties"
+				>
+				</a>
+			</h3>
+			<p>
+				If you want to do something that does not fit into this "implicit backing
+			field" scheme, you can always fall back to having a    <em>backing property</em>:
+			</p>
+			<pre><code>private var _table: Map&lt;String, Int&gt;? = null
+			public val table: Map&lt;String, Int&gt;
+				get() {
+					if (_table == null) {
+						_table = HashMap() // Type parameters are inferred
+					}
+					return _table ?: throw AssertionError("Set to null by another thread")
+				}
+			</code></pre>
+			<p>
+				In all respects, this is just the same as in Java since access to private
+				properties with default getters and setters is optimized so that no
+				function call overhead is introduced.
+			</p>
+			<h2 id="compile-time-constants">
+				Compile-Time Constants
+				<a
+					href="https://kotlinlang.org/docs/reference/properties.html#compile-time-constants"
+				>
+				</a>
+			</h2>
+			<p>
+			Properties the value of which is known at compile time can be marked as    <em>compile time constants</em> using the <code>const</code> modifier. Such
+				properties need to fulfil the following requirements:
+			</p>
+			<ul>
+				<li>
+					Top-level or member of an <code>object</code>
+				</li>
+				<li>
+					Initialized with a value of type <code>String</code> or a primitive
+					type
+				</li>
+				<li>
+					No custom getter
+				</li>
+			</ul>
+			<p>
+				Such properties can be used in annotations:
+			</p>
+			<pre><code>const val SUBSYSTEM_DEPRECATED: String = "This subsystem is deprecated"
+
+			@Deprecated(SUBSYSTEM_DEPRECATED) fun foo() { ... }
+			</code></pre>
+			<h2 id="late-initialized-properties">
+				Late-Initialized Properties
+				<a
+					href="https://kotlinlang.org/docs/reference/properties.html#late-initialized-properties"
+				>
+				</a>
+			</h2>
+			<p>
+				Normally, properties declared as having a non-null type must be initialized
+				in the constructor. However, fairly often this is not convenient. For
+				example, properties can be initialized through dependency injection, or in
+				the setup method of a unit test. In this case, you cannot supply a non-null
+				initializer in the constructor, but you still want to avoid null checks
+				when referencing the property inside the body of a class.
+			</p>
+			<p>
+			To handle this case, you can mark the property with the    <code>lateinit</code> modifier:
+			</p>
+			<pre><code>public class MyTest {
+				lateinit var subject: TestSubject
+
+				@SetUp fun setup() {
+					subject = TestSubject()
+				}
+
+				@Test fun test() {
+					subject.method()  // dereference directly
+				}
+			}
+			</code></pre>
+			<p>
+				The modifier can only be used on <code>var</code> properties declared
+				inside the body of a class (not in the primary constructor), and only when
+				the property does not have a custom getter or setter. The type of the
+				property must be non-null, and it must not be a primitive type.
+			</p>
+			<p>
+				Accessing a <code>lateinit</code> property before it has been initialized
+				throws a special exception that clearly identifies the property being
+				accessed and the fact that it hasn\'t been initialized.
+			</p>
+			<h2 id="overriding-properties">
+				Overriding Properties
+				<a
+					href="https://kotlinlang.org/docs/reference/properties.html#overriding-properties"
+				>
+				</a>
+			</h2>
+			<p>
+				See
+				<a
+					href="https://kotlinlang.org/docs/reference/classes.html#overriding-properties"
+				>
+					Overriding Properties
+				</a>
+			</p>
+			<h2 id="delegated-properties">
+				Delegated Properties
+				<a
+					href="https://kotlinlang.org/docs/reference/properties.html#delegated-properties"
+				>
+				</a>
+			</h2>
+			<p>
+				The most common kind of properties simply reads from (and maybe writes to)
+				a backing field. On the other hand, with custom getters and setters one can
+				implement any behaviour of a property. Somewhere in between, there are
+				certain common patterns of how a property may work. A few examples: lazy
+				values, reading from a map by a given key, accessing a database, notifying
+				listener on access, etc.
+			</p>
+			<p>
+				Such common behaviours can be implemented as libraries using
+				<a href="https://kotlinlang.org/docs/reference/delegated-properties.html">
+					<em>delegated properties</em>
+				</a>
+				.
+			</p>
+
+		]]>
+	</string>
+
+	<string name="topicContentInterfaces">
+		<![CDATA[
+
+ 			<h1 id="interfaces">
+				Interfaces
+				<a href="https://kotlinlang.org/docs/reference/interfaces.html#interfaces">
+				</a>
+			</h1>
+			<p>
+				Interfaces in Kotlin are very similar to Java 8. They can contain
+				declarations of abstract methods, as well as method implementations. What
+				makes them different from abstract classes is that interfaces cannot store
+				state. They can have properties but these need to be abstract or to provide
+				accessor implementations.
+			</p>
+			<p>
+				An interface is defined using the keyword interface
+			</p>
+			<pre><code>interface MyInterface {
+				fun bar()
+				fun foo() {
+				  // optional body
+				}
+			}
+			</code></pre>
+			<h2 id="implementing-interfaces">
+				Implementing Interfaces
+				<a
+					href="https://kotlinlang.org/docs/reference/interfaces.html#implementing-interfaces"
+				>
+				</a>
+			</h2>
+			<p>
+				A class or object can implement one or more interfaces
+			</p>
+			<pre><code>class Child : MyInterface {
+				override fun bar() {
+					// body
+				}
+			}
+			</code></pre>
+			<h2 id="properties-in-interfaces">
+				Properties in Interfaces
+				<a
+					href="https://kotlinlang.org/docs/reference/interfaces.html#properties-in-interfaces"
+				>
+				</a>
+			</h2>
+			<p>
+				You can declare properties in interfaces. A property declared in an
+				interface can either be abstract, or it can provide implementations for
+				accessors. Properties declared in interfaces can\'t have backing fields, and
+				therefore accessors declared in interfaces can\'t reference them.
+			</p>
+			<pre><code>interface MyInterface {
+				val prop: Int // abstract
+
+				val propertyWithImplementation: String
+					get() = "foo"
+
+				fun foo() {
+					print(prop)
+				}
+			}
+
+			class Child : MyInterface {
+				override val prop: Int = 29
+			}
+			</code></pre>
+			<h2 id="resolving-overriding-conflicts">
+				Resolving overriding conflicts
+				<a
+					href="https://kotlinlang.org/docs/reference/interfaces.html#resolving-overriding-conflicts"
+				>
+				</a>
+			</h2>
+			<p>
+				When we declare many types in our supertype list, it may appear that we
+				inherit more than one implementation of the same method. For example
+			</p>
+			<pre><code>interface A {
+				fun foo() { print("A") }
+				fun bar()
+			}
+
+			interface B {
+				fun foo() { print("B") }
+				fun bar() { print("bar") }
+			}
+
+			class C : A {
+				override fun bar() { print("bar") }
+			}
+
+			class D : A, B {
+				override fun foo() {
+					super&lt;A&gt;.foo()
+					super&lt;B&gt;.foo()
+				}
+
+				override fun bar() {
+					super&lt;B&gt;.bar()
+				}
+			}
+			</code></pre>
+			<p>
+				Interfaces <em>A</em> and <em>B</em> both declare functions <em>foo()</em>
+			and <em>bar()</em>. Both of them implement <em>foo()</em>, but only    <em>B</em>implements <em>bar()</em> (<em>bar()</em> is not marked abstract
+				in <em>A</em>, because this is the default for interfaces, if the function
+				has no body). Now, if we derive a concrete class <em>C</em> from <em>A</em>
+				, we, obviously, have to override <em>bar()</em> and provide an
+				implementation.
+			</p>
+			<p>
+				However, if we derive <em>D</em> from <em>A</em> and <em>B</em>, we need to
+				implement all the methods which we have inherited from multiple interfaces,
+				and to specify how exactly <em>D</em> should implement them. This rule
+			applies both to methods for which we\'ve inherited a single implementation (    <em>bar()</em>) and multiple implementations (<em>foo()</em>).
+			</p>
+
+		]]>
+	</string>
+
+	<string name="topicContentVisibilityModifiers">
+		<![CDATA[
+
+ 			<h1 id="visibility-modifiers">
+				Visibility Modifiers
+				<a
+					href="https://kotlinlang.org/docs/reference/visibility-modifiers.html#visibility-modifiers"
+				>
+				</a>
+			</h1>
+			<p>
+				Classes, objects, interfaces, constructors, functions, properties and their
+				setters can have <em>visibility modifiers</em>. (Getters always have the
+				same visibility as the property.) There are four visibility modifiers in
+				Kotlin: <code>private</code>, <code>protected</code>, <code>internal</code>
+				and <code>public</code>. The default visibility, used if there is no
+				explicit modifier, is <code>public</code>.
+			</p>
+			<p>
+				Below please find explanations of these for different type of declaring
+				scopes.
+			</p>
+			<h2 id="packages">
+				Packages
+				<a
+					href="https://kotlinlang.org/docs/reference/visibility-modifiers.html#packages"
+				>
+				</a>
+			</h2>
+			<p>
+				Functions, properties and classes, objects and interfaces can be declared
+				on the "top-level", i.e. directly inside a package:
+			</p>
+			<pre><code>// file name: example.kt
+			package foo
+
+			fun baz() {}
+			class Bar {}
+			</code></pre>
+			<ul>
+				<li>
+					If you do not specify any visibility modifier, <code>public</code> is
+					used by default, which means that your declarations will be visible
+					everywhere;
+				</li>
+				<li>
+					If you mark a declaration <code>private</code>, it will only be visible
+					inside the file containing the declaration;
+				</li>
+				<li>
+					If you mark it <code>internal</code>, it is visible everywhere in the
+					same
+					<a
+						href="https://kotlinlang.org/docs/reference/visibility-modifiers.html#modules"
+					>
+						module
+					</a>
+					;
+				</li>
+				<li>
+					<code>protected</code>
+					is not available for top-level declarations.
+				</li>
+			</ul>
+			<p>
+				Examples:
+			</p>
+			<pre><code>// file name: example.kt
+			package foo
+
+			private fun foo() {} // visible inside example.kt
+
+			public var bar: Int = 5 // property is visible everywhere
+				private set         // setter is visible only in example.kt
+
+			internal val baz = 6    // visible inside the same module
+			</code></pre>
+			<h2 id="classes-and-interfaces">
+				Classes and Interfaces
+				<a
+					href="https://kotlinlang.org/docs/reference/visibility-modifiers.html#classes-and-interfaces"
+				>
+				</a>
+			</h2>
+			<p>
+				For members declared inside a class:
+			</p>
+			<ul>
+				<li>
+					<code>private</code>
+					means visible inside this class only (including all its members);
+				</li>
+				<li>
+					<code>protected</code>
+					— same as <code>private</code> + visible in subclasses too;
+				</li>
+				<li>
+					<code>internal</code>
+					— any client <em>inside this module</em> who sees the declaring class
+					sees its <code>internal</code> members;
+				</li>
+				<li>
+					<code>public</code>
+					— any client who sees the declaring class sees its <code>public</code>
+					members.
+				</li>
+			</ul>
+			<p>
+				<em>NOTE</em>
+				for Java users: outer class does not see private members of its inner
+				classes in Kotlin.
+			</p>
+			<p>
+				If you override a <code>protected</code> member and do not specify the
+			visibility explicitly, the overriding member will also have    <code>protected</code> visibility.
+			</p>
+			<p>
+				Examples:
+			</p>
+			<pre><code>open class Outer {
+				private val a = 1
+				protected open val b = 2
+				internal val c = 3
+				val d = 4  // public by default
+
+				protected class Nested {
+					public val e: Int = 5
+				}
+			}
+
+			class Subclass : Outer() {
+				// a is not visible
+				// b, c and d are visible
+				// Nested and e are visible
+
+				override val b = 5   // \'b\' is protected
+			}
+
+			class Unrelated(o: Outer) {
+				// o.a, o.b are not visible
+				// o.c and o.d are visible (same module)
+				// Outer.Nested is not visible, and Nested::e is not visible either
+			}
+			</code></pre>
+			<h3 id="constructors">
+				Constructors
+				<a
+					href="https://kotlinlang.org/docs/reference/visibility-modifiers.html#constructors"
+				>
+				</a>
+			</h3>
+			<p>
+				To specify a visibility of the primary constructor of a class, use the
+				following syntax (note that you need to add an explicit constructor
+				keyword):
+			</p>
+			<pre><code>class C private constructor(a: Int) { ... }
+			</code></pre>
+			<p>
+			Here the constructor is private. By default, all constructors are    <code>public</code>, which effectively amounts to them being visible
+			everywhere where the class is visible (i.e. a constructor of an    <code>internal</code> class is only visible within the same module).
+			</p>
+			<h3 id="local-declarations">
+				Local declarations
+				<a
+					href="https://kotlinlang.org/docs/reference/visibility-modifiers.html#local-declarations"
+				>
+				</a>
+			</h3>
+			<p>
+				Local variables, functions and classes can not have visibility modifiers.
+			</p>
+			<h2 id="modules">
+				Modules
+				<a
+					href="https://kotlinlang.org/docs/reference/visibility-modifiers.html#modules"
+				>
+				</a>
+			</h2>
+			<p>
+				The <code>internal</code> visibility modifier means that the member is
+				visible with the same module. More specifically, a module is a set of
+				Kotlin files compiled together:
+			</p>
+			<ul>
+				<li>
+					an IntelliJ IDEA module;
+				</li>
+				<li>
+					a Maven project;
+				</li>
+				<li>
+					a Gradle source set;
+				</li>
+				<li>
+					a set of files compiled with one invocation of the Ant task.
+				</li>
+			</ul>
+
+		]]>
+	</string>
+
+	<string name="topicContentExtensions">
+		<![CDATA[
+
+ 			<h1 id="extensions">
+				Extensions
+				<a href="https://kotlinlang.org/docs/reference/extensions.html#extensions">
+				</a>
+			</h1>
+			<p>
+				Kotlin, similar to C# and Gosu, provides the ability to extend a class with
+				new functionality without having to inherit from the class or use any type
+				of design pattern such as Decorator. This is done via special declarations
+				called <em>extensions</em>. Kotlin supports <em>extension functions</em>
+				and <em>extension properties</em>.
+			</p>
+			<h2 id="extension-functions">
+				Extension Functions
+				<a
+					href="https://kotlinlang.org/docs/reference/extensions.html#extension-functions"
+				>
+				</a>
+			</h2>
+			<p>
+			To declare an extension function, we need to prefix its name with a<em>receiver type</em>, i.e. the type being extended. The following adds a    <code>swap</code> function to <code>MutableList&lt;Int&gt;</code>:
+			</p>
+			<pre><code>fun MutableList&lt;Int&gt;.swap(index1: Int, index2: Int) {
+				val tmp = this[index1] // \'this\' corresponds to the list
+				this[index1] = this[index2]
+				this[index2] = tmp
+			}
+			</code></pre>
+			<p>
+				The this keyword inside an extension function corresponds to the receiver
+				object (the one that is passed before the dot). Now, we can call such a
+				function on any <code>MutableList&lt;Int&gt;</code>:
+			</p>
+			<pre><code>val l = mutableListOf(1, 2, 3)
+			l.swap(0, 2) // \'this\' inside \'swap()\' will hold the value of \'l\'
+			</code></pre>
+			<p>
+			Of course, this function makes sense for any    <code>MutableList&lt;T&gt;</code>, and we can make it generic:
+			</p>
+			<pre><code>fun &lt;T&gt; MutableList&lt;T&gt;.swap(index1: Int, index2: Int) {
+				val tmp = this[index1] // \'this\' corresponds to the list
+				this[index1] = this[index2]
+				this[index2] = tmp
+			}
+			</code></pre>
+			<p>
+				We declare the generic type parameter before the function name for it to be
+				available in the receiver type expression. See
+				<a href="https://kotlinlang.org/docs/reference/generics.html">
+					Generic functions
+				</a>
+				.
+			</p>
+			<h2 id="extensions-are-resolved-statically">
+				Extensions are resolved statically
+				<a
+					href="https://kotlinlang.org/docs/reference/extensions.html#extensions-are-resolved-statically"
+				>
+				</a>
+			</h2>
+			<p>
+				Extensions do not actually modify classes they extend. By defining an
+				extension, you do not insert new members into a class, but merely make new
+				functions callable with the dot-notation on variables of this type.
+			</p>
+			<p>
+				We would like to emphasize that extension functions are dispatched
+				statically, i.e. they are not virtual by receiver type. This means that the
+				extension function being called is determined by the type of the expression
+				on which the function is invoked, not by the type of the result of
+				evaluating that expression at runtime. For example:
+			</p>
+			<pre><code>open class C
+
+			class D: C()
+
+			fun C.foo() = "c"
+
+			fun D.foo() = "d"
+
+			fun printFoo(c: C) {
+				println(c.foo())
+			}
+
+			printFoo(D())
+			</code></pre>
+			<p>
+				This example will print "c", because the extension function being called
+				depends only on the declared type of the parameter <code>c</code>, which is
+				the <code>C</code> class.
+			</p>
+			<p>
+				If a class has a member function, and an extension function is defined
+				which has the same receiver type, the same name and is applicable to given
+				arguments, the member always wins. For example:
+			</p>
+			<pre><code>class C {
+				fun foo() { println("member") }
+			}
+
+			fun C.foo() { println("extension") }
+			</code></pre>
+			<p>
+			If we call <code>c.foo()</code> of any <code>c</code> of type    <code>C</code>, it will print "member", not "extension".
+			</p>
+			<p>
+				However, it\'s perfectly OK for extension functions to overload member
+				functions which have the same name but a different signature:
+			</p>
+			<pre><code>class C {
+				fun foo() { println("member") }
+			}
+
+			fun C.foo(i: Int) { println("extension") }
+			</code></pre>
+			<p>
+				The call to <code>C().foo(1)</code> will print "extension".
+			</p>
+			<h2 id="nullable-receiver">
+				Nullable Receiver
+				<a
+					href="https://kotlinlang.org/docs/reference/extensions.html#nullable-receiver"
+				>
+				</a>
+			</h2>
+			<p>
+				Note that extensions can be defined with a nullable receiver type. Such
+				extensions can be called on an object variable even if its value is null,
+				and can check for <code>this == null</code> inside the body. This is what
+				allows you to call toString() in Kotlin without checking for null: the
+				check happens inside the extension function.
+			</p>
+			<pre><code>fun Any?.toString(): String {
+				if (this == null) return "null"
+				// after the null check, \'this\' is autocast to a non-null type, so the toString() below
+				// resolves to the member function of the Any class
+				return toString()
+			}
+			</code></pre>
+			<h2 id="extension-properties">
+				Extension Properties
+				<a
+					href="https://kotlinlang.org/docs/reference/extensions.html#extension-properties"
+				>
+				</a>
+			</h2>
+			<p>
+				Similarly to functions, Kotlin supports extension properties:
+			</p>
+			<pre><code>val &lt;T&gt; List&lt;T&gt;.lastIndex: Int
+				get() = size - 1
+			</code></pre>
+			<p>
+				Note that, since extensions do not actually insert members into classes,
+				there\'s no efficient way for an extension property to have a
+				<a
+					href="https://kotlinlang.org/docs/reference/properties.html#backing-fields"
+				>
+					backing field
+				</a>
+				. This is why initializers are not allowed for extension properties. Their
+				behavior can only be defined by explicitly providing getters/setters.
+			</p>
+			<p>
+				Example:
+			</p>
+			<pre><code>val Foo.bar = 1 // error: initializers are not allowed for extension properties
+			</code></pre>
+			<h2 id="companion-object-extensions">
+				Companion Object Extensions
+				<a
+					href="https://kotlinlang.org/docs/reference/extensions.html#companion-object-extensions"
+				>
+				</a>
+			</h2>
+			<p>
+				If a class has a
+				<a
+					href="https://kotlinlang.org/docs/reference/object-declarations.html#companion-objects"
+				>
+					companion object
+				</a>
+				defined, you can also define extension functions and properties for the
+				companion object:
+			</p>
+			<pre><code>class MyClass {
+				companion object { }  // will be called "Companion"
+			}
+
+			fun MyClass.Companion.foo() {
+				// ...
+			}
+			</code></pre>
+			<p>
+				Just like regular members of the companion object, they can be called using
+				only the class name as the qualifier:
+			</p>
+			<pre><code>MyClass.foo()
+			</code></pre>
+			<h2 id="scope-of-extensions">
+				Scope of Extensions
+				<a
+					href="https://kotlinlang.org/docs/reference/extensions.html#scope-of-extensions"
+				>
+				</a>
+			</h2>
+			<p>
+				Most of the time we define extensions on the top level, i.e. directly under
+				packages:
+			</p>
+			<pre><code>package foo.bar
+
+			fun Baz.goo() { ... }
+			</code></pre>
+			<p>
+				To use such an extension outside its declaring package, we need to import
+				it at the call site:
+			</p>
+			<pre><code>package com.example.usage
+
+			import foo.bar.goo // importing all extensions by name "goo"
+							   // or
+			import foo.bar.*   // importing everything from "foo.bar"
+
+			fun usage(baz: Baz) {
+				baz.goo()
+			}
+
+			</code></pre>
+			<p>
+				See
+				<a href="https://kotlinlang.org/docs/reference/packages.html#imports">
+					Imports
+				</a>
+				for more information.
+			</p>
+			<h2 id="declaring-extensions-as-members">
+				Declaring Extensions as Members
+				<a
+					href="https://kotlinlang.org/docs/reference/extensions.html#declaring-extensions-as-members"
+				>
+				</a>
+			</h2>
+			<p>
+				Inside a class, you can declare extensions for another class. Inside such
+				an extension, there are multiple <em>implicit receivers</em> - objects
+				members of which can be accessed without a qualifier. The instance of the
+			class in which the extension is declared is called    <em>dispatch receiver</em>, and the instance of the receiver type of the
+				extension method is called <em>extension receiver</em>.
+			</p>
+			<pre><code>class D {
+				fun bar() { ... }
+			}
+
+			class C {
+				fun baz() { ... }
+
+				fun D.foo() {
+					bar()   // calls D.bar
+					baz()   // calls C.baz
+				}
+
+				fun caller(d: D) {
+					d.foo()   // call the extension function
+				}
+			}
+			</code></pre>
+			<p>
+				In case of a name conflict between the members of the dispatch receiver and
+				the extension receiver, the extension receiver takes precedence. To refer
+				to the member of the dispatch receiver you can use the
+				<a
+					href="https://kotlinlang.org/docs/reference/this-expressions.html#qualified"
+				>
+					qualified <code>this</code> syntax
+				</a>
+				.
+			</p>
+			<pre><code>class C {
+				fun D.foo() {
+					toString()         // calls D.toString()
+					this@C.toString()  // calls C.toString()
+				}
+			</code></pre>
+			<p>
+				Extensions declared as members can be declared as <code>open</code> and
+				overridden in subclasses. This means that the dispatch of such functions is
+				virtual with regard to the dispatch receiver type, but static with regard
+				to the extension receiver type.
+			</p>
+			<pre><code>open class D {
+			}
+
+			class D1 : D() {
+			}
+
+			open class C {
+				open fun D.foo() {
+					println("D.foo in C")
+				}
+
+				open fun D1.foo() {
+					println("D1.foo in C")
+				}
+
+				fun caller(d: D) {
+					d.foo()   // call the extension function
+				}
+			}
+
+			class C1 : C() {
+				override fun D.foo() {
+					println("D.foo in C1")
+				}
+
+				override fun D1.foo() {
+					println("D1.foo in C1")
+				}
+			}
+
+			C().caller(D())   // prints "D.foo in C"
+			C1().caller(D())  // prints "D.foo in C1" - dispatch receiver is resolved virtually
+			C().caller(D1())  // prints "D.foo in C" - extension receiver is resolved statically
+			</code></pre>
+			<h2 id="motivation">
+				Motivation
+				<a href="https://kotlinlang.org/docs/reference/extensions.html#motivation">
+				</a>
+			</h2>
+			<p>
+			In Java, we are used to classes named "*Utils": <code>FileUtils</code>,<code>StringUtils</code> and so on. The famous    <code>java.util.Collections</code> belongs to the same breed. And the
+				unpleasant part about these Utils-classes is that the code that uses them
+				looks like this:
+			</p>
+			<pre><code>// Java
+			Collections.swap(list, Collections.binarySearch(list, Collections.max(otherList)), Collections.max(list))
+			</code></pre>
+			<p>
+				Those class names are always getting in the way. We can use static imports
+				and get this:
+			</p>
+			<pre><code>// Java
+			swap(list, binarySearch(list, max(otherList)), max(list))
+			</code></pre>
+			<p>
+				This is a little better, but we have no or little help from the powerful
+				code completion of the IDE. It would be so much better if we could say
+			</p>
+			<pre><code>// Java
+			list.swap(list.binarySearch(otherList.max()), list.max())
+			</code></pre>
+			<p>
+			But we don\'t want to implement all the possible methods inside the class    <code>List</code>, right? This is where extensions help us.
+			</p>
+
+		]]>
+	</string>
+
+	<string name="topicContentDataClasses">
+		<![CDATA[
+
+ 			<h1 id="data-classes">
+				Data Classes
+				<a
+					href="https://kotlinlang.org/docs/reference/data-classes.html#data-classes"
+				>
+				</a>
+			</h1>
+			<p>
+				We frequently create a class to do nothing but hold data. In such a class
+				some standard functionality is often mechanically derivable from the data.
+			In Kotlin, this is called a <em>data class</em> and is marked as    <code>data</code>:
+			</p>
+			<pre><code>data class User(val name: String, val age: Int)
+			</code></pre>
+			<p>
+				The compiler automatically derives the following members from all
+				properties declared in the primary constructor:
+			</p>
+
+			<p>
+					<code>- equals()</code>
+					/<code>hashCode()</code> pair,
+				</p>
+				<p>
+					<code>- toString()</code>
+					of the form <code>"User(name=John, age=42)"</code>,
+				</p>
+				<p>
+					<a href="https://kotlinlang.org/docs/reference/multi-declarations.html">
+						<code>- componentN()</code>
+						functions
+					</a>
+					corresponding to the properties in their order of declaration,
+				</p>
+				<p>
+					<code>- copy()</code>
+					function (see below).
+				</p>
+
+			<p>
+				If any of these functions is explicitly defined in the class body or
+				inherited from the base types, it will not be generated.
+			</p>
+			<p>
+				To ensure consistency and meaningful behavior of the generated code, data
+				classes have to fulfil the following requirements:
+			</p>
+			<ul>
+				<li>
+					The primary constructor needs to have at least one parameter;
+				</li>
+				<li>
+			All primary constructor parameters need to be marked as        <code>val</code> or <code>var</code>;
+				</li>
+				<li>
+					Data classes cannot be abstract, open, sealed or inner;
+				</li>
+				<li>
+					(before 1.1) Data classes may only implement interfaces.
+				</li>
+			</ul>
+			<p>
+				Since 1.1, data classes may extend other classes (see
+				<a href="https://kotlinlang.org/docs/reference/sealed-classes.html">
+					Sealed classes
+				</a>
+				for examples).
+			</p>
+			<p>
+				On the JVM, if the generated class needs to have a parameterless
+				constructor, default values for all properties have to be specified (see
+				<a href="https://kotlinlang.org/docs/reference/classes.html#constructors">
+					Constructors
+				</a>
+				).
+			</p>
+			<pre><code>data class User(val name: String = "", val age: Int = 0)
+			</code></pre>
+			<h2 id="copying">
+				Copying
+				<a href="https://kotlinlang.org/docs/reference/data-classes.html#copying">
+				</a>
+			</h2>
+			<p>
+				It\'s often the case that we need to copy an object altering <em>some</em>
+			of its properties, but keeping the rest unchanged. This is what    <code>copy()</code> function is generated for. For the <code>User</code>
+				class above, its implementation would be as follows:
+			</p>
+			<pre><code>fun copy(name: String = this.name, age: Int = this.age) = User(name, age)
+			</code></pre>
+			<p>
+				This allows us to write
+			</p>
+			<pre><code>val jack = User(name = "Jack", age = 1)
+			val olderJack = jack.copy(age = 2)
+			</code></pre>
+			<h2 id="data-classes-and-destructuring-declarations">
+				Data Classes and Destructuring Declarations
+				<a
+					href="https://kotlinlang.org/docs/reference/data-classes.html#data-classes-and-destructuring-declarations"
+				>
+				</a>
+			</h2>
+			<p>
+				<em>Component functions</em>
+				generated for data classes enable their use in
+				<a href="https://kotlinlang.org/docs/reference/multi-declarations.html">
+					destructuring declarations
+				</a>
+				:
+			</p>
+			<pre><code>val jane = User("Jane", 35)
+			val (name, age) = jane
+			println("$name, $age years of age") // prints "Jane, 35 years of age"
+			</code></pre>
+			<h2 id="standard-data-classes">
+				Standard Data Classes
+				<a
+					href="https://kotlinlang.org/docs/reference/data-classes.html#standard-data-classes"
+				>
+				</a>
+			</h2>
+			<p>
+				The standard library provides <code>Pair</code> and <code>Triple</code>. In
+				most cases, though, named data classes are a better design choice, because
+				they make the code more readable by providing meaningful names for
+				properties.
+			</p>
+
+		]]>
+	</string>
+
+	<string name="topicContentSealedClasses">
+		<![CDATA[
+
+ 			<h1 id="sealed-classes">
+				Sealed Classes
+				<a
+					href="https://kotlinlang.org/docs/reference/sealed-classes.html#sealed-classes"
+				>
+				</a>
+			</h1>
+			<p>
+				Sealed classes are used for representing restricted class hierarchies, when
+				a value can have one of the types from a limited set, but cannot have any
+				other type. They are, in a sense, an extension of enum classes: the set of
+				values for an enum type is also restricted, but each enum constant exists
+				only as a single instance, whereas a subclass of a sealed class can have
+				multiple instances which can contain state.
+			</p>
+			<p>
+				To declare a sealed class, you put the <code>sealed</code> modifier before
+				the name of the class. A sealed class can have subclasses, but all of them
+				must be declared in the same file as the sealed class itself. (Before
+				Kotlin 1.1, the rules were even more strict: classes had to be nested
+				inside the declaration of the sealed class).
+			</p>
+			<pre><code>sealed class Expr
+			data class Const(val number: Double) : Expr()
+			data class Sum(val e1: Expr, val e2: Expr) : Expr()
+			object NotANumber : Expr()
+			</code></pre>
+			<p>
+				(The example above uses one additional new feature of Kotlin 1.1: the
+				possibility for data classes to extend other classes, including sealed
+				classes.)
+			</p>
+			<p>
+				Note that classes which extend subclasses of a sealed class (indirect
+				inheritors) can be placed anywhere, not necessarily in the same file.
+			</p>
+			<p>
+				The key benefit of using sealed classes comes into play when you use them
+				in a
+				<a
+					href="https://kotlinlang.org/docs/reference/control-flow.html#when-expression"
+				>
+					<code>when</code>
+					expression
+				</a>
+				. If it\'s possible to verify that the statement covers all cases, you don\'t
+				need to add an <code>else</code> clause to the statement.
+			</p>
+			<pre><code>fun eval(expr: Expr): Double = when(expr) {
+				is Const -&gt; expr.number
+				is Sum -&gt; eval(expr.e1) + eval(expr.e2)
+				NotANumber -&gt; Double.NaN
+				// the \`else\` clause is not required because we\'ve covered all the cases
+			}</code></pre>
+
+		]]>
+	</string>
+
+	<string name="topicContentGenerics">
+		<![CDATA[
+
+ 			<h1 id="generics">
+			Generics    <a href="https://kotlinlang.org/docs/reference/generics.html#generics"></a>
+			</h1>
+			<p>
+				As in Java, classes in Kotlin may have type parameters:
+			</p>
+			<pre><code>class Box&lt;T&gt;(t: T) {
+				var value = t
+			}
+			</code></pre>
+			<p>
+				In general, to create an instance of such a class, we need to provide the
+				type arguments:
+			</p>
+			<pre><code>val box: Box&lt;Int&gt; = Box&lt;Int&gt;(1)
+			</code></pre>
+			<p>
+				But if the parameters may be inferred, e.g. from the constructor arguments
+				or by some other means, one is allowed to omit the type arguments:
+			</p>
+			<pre><code>val box = Box(1) // 1 has type Int, so the compiler figures out that we are talking about Box&lt;Int&gt;
+			</code></pre>
+			<h2 id="variance">
+			Variance    <a href="https://kotlinlang.org/docs/reference/generics.html#variance"></a>
+			</h2>
+			<p>
+				One of the most tricky parts of Java\'s type system is wildcard types (see
+				<a href="http://www.angelikalanger.com/GenericsFAQ/JavaGenericsFAQ.html">
+					Java Generics FAQ
+				</a>
+				). And Kotlin doesn\'t have any. Instead, it has two other things:
+				declaration-site variance and type projections.
+			</p>
+			<p>
+				First, let\'s think about why Java needs those mysterious wildcards. The
+				problem is explained in
+				<a href="http://www.oracle.com/technetwork/java/effectivejava-136174.html">
+					Effective Java
+				</a>
+				, Item 28: <em>Use bounded wildcards to increase API flexibility</em>.
+			First, generic types in Java are invariant, meaning that<code>List&lt;String&gt;</code> is not a subtype of    <code>List&lt;Object&gt;</code>. Why so? If List was not invariant, it
+				would have been no better than Java\'s arrays, since the following code
+				would have compiled and caused an exception at runtime:
+			</p>
+			<pre><code>// Java
+			List&lt;String&gt; strs = new ArrayList&lt;String&gt;();
+			List&lt;Object&gt; objs = strs; // !!! The cause of the upcoming problem sits here. Java prohibits this!
+			objs.add(1); // Here we put an Integer into a list of Strings
+			String s = strs.get(0); // !!! ClassCastException: Cannot cast Integer to String
+			</code></pre>
+			<p>
+				So, Java prohibits such things in order to guarantee run-time safety. But
+				this has some implications. For example, consider the <code>addAll()</code>
+				method from <code>Collection</code> interface. What\'s the signature of this
+				method? Intuitively, we\'d put it this way:
+			</p>
+			<pre><code>// Java
+			interface Collection&lt;E&gt; ... {
+			  void addAll(Collection&lt;E&gt; items);
+			}
+			</code></pre>
+			<p>
+				But then, we would not be able to do the following simple thing (which is
+				perfectly safe):
+			</p>
+			<pre><code>// Java
+			void copyAll(Collection&lt;Object&gt; to, Collection&lt;String&gt; from) {
+			  to.addAll(from); // !!! Would not compile with the naive declaration of addAll:
+							   //       Collection&lt;String&gt; is not a subtype of Collection&lt;Object&gt;
+			}
+			</code></pre>
+			<p>
+				(In Java, we learned this lesson the hard way, see
+				<a href="http://www.oracle.com/technetwork/java/effectivejava-136174.html">
+					Effective Java
+				</a>
+				, Item 25: <em>Prefer lists to arrays</em>)
+			</p>
+			<p>
+				That\'s why the actual signature of <code>addAll()</code> is the following:
+			</p>
+			<pre><code>// Java
+			interface Collection&lt;E&gt; ... {
+			  void addAll(Collection&lt;? extends E&gt; items);
+			}
+			</code></pre>
+			<p>
+				The wildcard type argument <code>? extends E</code> indicates that this
+			method accepts a collection of objects of <code>E</code>    <em>or some subtype of</em> <code>E</code>, not just <code>E</code> itself.
+				This means that we can safely read <code>E</code>\'s from items (elements of
+				this collection are instances of a subclass of E), but cannot write to it
+			since we do not know what objects comply to that unknown subtype of    <code>E</code>. In return for this limitation, we have the desired
+			behaviour: <code>Collection&lt;String&gt;</code> <em>is</em> a subtype of    <code>Collection&lt;? extends Object&gt;</code>. In "clever words", the
+				wildcard with an extends-bound (upper bound) makes the type covariant.
+			</p>
+			<p>
+				The key to understanding why this trick works is rather simple: if you can
+			only take items from a collection, then using a collection of    <code>String</code>s and reading <code>Object</code>s from it is fine.
+				Conversely, if you can only <em>put</em>items into the collection, it\'s OK
+				to take a collection of <code>Object</code>s and put <code>String</code>s
+				into it: in Java we have <code>List&lt;? super String&gt;</code> a
+				supertype of <code>List&lt;Object&gt;</code>.
+			</p>
+			<p>
+				The latter is called contravariance, and you can only call methods that
+				take String as an argument on <code>List&lt;? super String&gt;</code>
+			(e.g., you can call <code>add(String)</code> or<code>set(int, String)</code>), while if you call something that returns<code>T</code> in <code>List&lt;T&gt;</code>, you don\'t get a    <code>String</code>, but an <code>Object</code>.
+			</p>
+			<p>
+				Joshua Bloch calls those objects you only read from Producers, and those
+				you only write to Consumers. He recommends: "
+				<em>
+					For maximum flexibility, use wildcard types on input parameters that
+					represent producers or consumers
+				</em>
+				", and proposes the following mnemonic:
+			</p>
+			<p>
+				<em>PECS stands for Producer-Extends, Consumer-Super.</em>
+			</p>
+			<p>
+				<em>NOTE</em>
+				: if you use a producer-object, say, <code>List&lt;? extends Foo&gt;</code>
+				, you are not allowed to call <code>add()</code> or <code>set()</code> on
+				this object, but this does not mean that this object is immutable: for
+				example, nothing prevents you from calling <code>clear()</code> to remove
+				all items from the list, since <code>clear()</code> does not take any
+				parameters at all. The only thing guaranteed by wildcards (or other types
+				of variance) is type safety. Immutability is a completely different story.
+			</p>
+			<h3 id="declaration-site-variance">
+				Declaration-site variance
+				<a
+					href="https://kotlinlang.org/docs/reference/generics.html#declaration-site-variance"
+				>
+				</a>
+			</h3>
+			<p>
+				Suppose we have a generic interface <code>Source&lt;T&gt;</code> that does
+				not have any methods that take <code>T</code> as a parameter, only methods
+				that return <code>T</code>:
+			</p>
+			<pre><code>// Java
+			interface Source&lt;T&gt; {
+			  T nextT();
+			}
+			</code></pre>
+			<p>
+			Then, it would be perfectly safe to store a reference to an instance of<code>Source&lt;String&gt;</code> in a variable of type    <code>Source&lt;Object&gt;</code> – there are no consumer-methods to call.
+				But Java does not know this, and still prohibits it:
+			</p>
+			<pre><code>// Java
+			void demo(Source&lt;String&gt; strs) {
+			  Source&lt;Object&gt; objects = strs; // !!! Not allowed in Java
+			  // ...
+			}
+			</code></pre>
+			<p>
+			To fix this, we have to declare objects of type    <code>Source&lt;? extends Object&gt;</code>, which is sort of meaningless,
+				because we can call all the same methods on such a variable as before, so
+				there\'s no value added by the more complex type. But the compiler does not
+				know that.
+			</p>
+			<p>
+				In Kotlin, there is a way to explain this sort of thing to the compiler.
+				This is called declaration-site variance: we can annotate the type
+				parameter <code>T</code> of Source to make sure that it is only returned
+				(produced) from members of <code>Source&lt;T&gt;</code>, and never
+				consumed. To do this we provide the out modifier:
+			</p>
+			<pre><code>abstract class Source&lt;out T&gt; {
+				abstract fun nextT(): T
+			}
+
+			fun demo(strs: Source&lt;String&gt;) {
+				val objects: Source&lt;Any&gt; = strs // This is OK, since T is an out-parameter
+				// ...
+			}
+			</code></pre>
+			<p>
+			The general rule is: when a type parameter <code>T</code> of a class    <code>C</code> is declared out, it may occur only in out-position in the
+				members of <code>C</code>, but in return <code>C&lt;Base&gt;</code> can
+				safely be a supertype of <code>C&lt;Derived&gt;</code>.
+			</p>
+			<p>
+				In "clever words" they say that the class <code>C</code> is covariant in
+				the parameter <code>T</code>, or that <code>T</code> is a covariant type
+			parameter. You can think of <code>C</code> as being a producer of    <code>T</code>\'s, and NOT a consumer of <code>T</code>\'s.
+			</p>
+			<p>
+				The out modifier is called a variance annotation, and since it is provided
+				at the type parameter declaration site, we talk about declaration-site
+				variance. This is in contrast with Java\'s use-site variance where wildcards
+				in the type usages make the types covariant.
+			</p>
+			<p>
+				In addition to out, Kotlin provides a complementary variance annotation:
+				in. It makes a type parameter contravariant: it can only be consumed and
+			never produced. A good example of a contravariant class is    <code>Comparable</code>:
+			</p>
+			<pre><code>abstract class Comparable&lt;in T&gt; {
+				abstract fun compareTo(other: T): Int
+			}
+
+			fun demo(x: Comparable&lt;Number&gt;) {
+				x.compareTo(1.0) // 1.0 has type Double, which is a subtype of Number
+				// Thus, we can assign x to a variable of type Comparable&lt;Double&gt;
+				val y: Comparable&lt;Double&gt; = x // OK!
+			}
+			</code></pre>
+			<p>
+				We believe that the words in and out are self-explaining (as they were
+				successfully used in C# for quite some time already), thus the mnemonic
+				mentioned above is not really needed, and one can rephrase it for a higher
+				purpose:
+			</p>
+			<p>
+				<a href="http://en.wikipedia.org/wiki/Existentialism">The Existential</a>
+				Transformation: Consumer in, Producer out! :-)
+			</p>
+			<h2 id="type-projections">
+				Type projections
+				<a
+					href="https://kotlinlang.org/docs/reference/generics.html#type-projections"
+				>
+				</a>
+			</h2>
+			<h3 id="use-site-variance-type-projections">
+				Use-site variance: Type projections
+				<a
+					href="https://kotlinlang.org/docs/reference/generics.html#use-site-variance-type-projections"
+				>
+				</a>
+			</h3>
+			<p>
+				It is very convenient to declare a type parameter T as <em>out</em> and
+				avoid trouble with subtyping on the use site, but some classes can\'t
+				actually be restricted to only return <code>T</code>\'s! A good example of
+				this is Array:
+			</p>
+			<pre><code>class Array&lt;T&gt;(val size: Int) {
+				fun get(index: Int): T { /* ... */ }
+				fun set(index: Int, value: T) { /* ... */ }
+			}
+			</code></pre>
+			<p>
+				This class cannot be either co- or contravariant in <code>T</code>. And
+				this imposes certain inflexibilities. Consider the following function:
+			</p>
+			<pre><code>fun copy(from: Array&lt;Any&gt;, to: Array&lt;Any&gt;) {
+				assert(from.size == to.size)
+				for (i in from.indices)
+					to[i] = from[i]
+			}
+			</code></pre>
+			<p>
+				This function is supposed to copy items from one array to another. Let\'s
+				try to apply it in practice:
+			</p>
+			<pre><code>val ints: Array&lt;Int&gt; = arrayOf(1, 2, 3)
+			val any = Array&lt;Any&gt;(3) { "" }
+			copy(ints, any) // Error: expects (Array&lt;Any&gt;, Array&lt;Any&gt;)
+			</code></pre>
+			<p>
+				Here we run into the same familiar problem: <code>Array&lt;T&gt;</code> is
+				invariant in <code>T</code>, thus neither of <code>Array&lt;Int&gt;</code>
+				and <code>Array&lt;Any&gt;</code> is a subtype of the other. Why? Again,
+				because copy might be doing bad things, i.e. it might attempt to write,
+			say, a String to <code>from</code>, and if we actually passed an array of    <code>Int</code> there, a <code>ClassCastException</code> would have been
+				thrown sometime later.
+			</p>
+			<p>
+				Then, the only thing we want to ensure is that <code>copy()</code> does not
+				do any bad things. We want to prohibit it from writing to <code>from</code>
+				, and we can:
+			</p>
+			<pre><code>fun copy(from: Array&lt;out Any&gt;, to: Array&lt;Any&gt;) {
+			 // ...
+			}
+			</code></pre>
+			<p>
+			What has happened here is called type projection: we said that    <code>from</code> is not simply an array, but a restricted (projected) one:
+			we can only call those methods that return the type parameter<code>T</code>, in this case it means that we can only call    <code>get()</code>. This is our approach to use-site variance, and
+				corresponds to Java\'s <code>Array&lt;? extends Object&gt;</code>, but in a
+				slightly simpler way.
+			</p>
+			<p>
+				You can project a type with in as well:
+			</p>
+			<pre><code>fun fill(dest: Array&lt;in String&gt;, value: String) {
+				// ...
+			}
+			</code></pre>
+			<p>
+				<code>Array&lt;in String&gt;</code>
+				corresponds to Java\'s <code>Array&lt;? super String&gt;</code>, i.e. you
+			can pass an array of <code>CharSequence</code> or an array of    <code>Object</code> to the <code>fill()</code> function.
+			</p>
+			<h3 id="star-projections">
+				Star-projections
+				<a
+					href="https://kotlinlang.org/docs/reference/generics.html#star-projections"
+				>
+				</a>
+			</h3>
+			<p>
+				Sometimes you want to say that you know nothing about the type argument,
+				but still want to use it in a safe way. The safe way here is to define such
+				a projection of the generic type, that every concrete instantiation of that
+				generic type would be a subtype of that projection.
+			</p>
+			<p>
+				Kotlin provides so called star-projection syntax for this:
+			</p>
+			<ul>
+				<li>
+					For <code>Foo&lt;out T&gt;</code>, where <code>T</code> is a covariant
+			type parameter with the upper bound <code>TUpper</code>,<code>Foo&lt;*&gt;</code> is equivalent to<code>Foo&lt;out TUpper&gt;</code>. It means that when the<code>T</code> is unknown you can safely <em>read</em> values of        <code>TUpper</code> from <code>Foo&lt;*&gt;</code>.
+				</li>
+				<li>
+					For <code>Foo&lt;in T&gt;</code>, where <code>T</code> is a
+					contravariant type parameter, <code>Foo&lt;*&gt;</code> is equivalent
+					to <code>Foo&lt;in Nothing&gt;</code>. It means there is nothing you
+			can <em>write</em> to <code>Foo&lt;*&gt;</code> in a safe way when        <code>T</code> is unknown.
+				</li>
+				<li>
+					For <code>Foo&lt;T&gt;</code>, where <code>T</code> is an invariant
+			type parameter with the upper bound <code>TUpper</code>,<code>Foo&lt;*&gt;</code> is equivalent to<code>Foo&lt;out TUpper&gt;</code> for reading values and to        <code>Foo&lt;in Nothing&gt;</code> for writing values.
+				</li>
+			</ul>
+			<p>
+				If a generic type has several type parameters each of them can be projected
+			independently. For example, if the type is declared as    <code>interface Function&lt;in T, out U&gt;</code> we can imagine the
+				following star-projections:
+			</p>
+			<ul>
+				<li>
+					<code>Function&lt;*, String&gt;</code>
+					means <code>Function&lt;in Nothing, String&gt;</code>;
+				</li>
+				<li>
+					<code>Function&lt;Int, *&gt;</code>
+					means <code>Function&lt;Int, out Any?&gt;</code>;
+				</li>
+				<li>
+					<code>Function&lt;*, *&gt;</code>
+					means <code>Function&lt;in Nothing, out Any?&gt;</code>.
+				</li>
+			</ul>
+			<p>
+				<em>Note</em>
+				: star-projections are very much like Java\'s raw types, but safe.
+			</p>
+			<h2 id="generic-functions">
+				Generic functions
+				<a
+					href="https://kotlinlang.org/docs/reference/generics.html#generic-functions"
+				>
+				</a>
+			</h2>
+			<p>
+				Not only classes can have type parameters. Functions can, too. Type
+				parameters are placed before the name of the function:
+			</p>
+			<pre><code>fun &lt;T&gt; singletonList(item: T): List&lt;T&gt; {
+				// ...
+			}
+
+			fun &lt;T&gt; T.basicToString() : String {  // extension function
+				// ...
+			}
+			</code></pre>
+			<p>
+				To call a generic function, specify the type arguments at the call site
+				after the name of the function:
+			</p>
+			<pre><code>val l = singletonList&lt;Int&gt;(1)
+			</code></pre>
+			<h2 id="generic-constraints">
+				Generic constraints
+				<a
+					href="https://kotlinlang.org/docs/reference/generics.html#generic-constraints"
+				>
+				</a>
+			</h2>
+			<p>
+				The set of all possible types that can be substituted for a given type
+				parameter may be restricted by generic constraints.
+			</p>
+			<h3 id="upper-bounds">
+				Upper bounds
+				<a href="https://kotlinlang.org/docs/reference/generics.html#upper-bounds">
+				</a>
+			</h3>
+			<p>
+				The most common type of constraint is an upper bound that corresponds to
+				Java\'s <em>extends</em> keyword:
+			</p>
+			<pre><code>fun &lt;T : Comparable&lt;T&gt;&gt; sort(list: List&lt;T&gt;) {
+				// ...
+			}
+			</code></pre>
+			<p>
+			The type specified after a colon is the upper bound: only a subtype of    <code>Comparable&lt;T&gt;</code> may be substituted for <code>T</code>. For
+				example
+			</p>
+			<pre><code>sort(listOf(1, 2, 3)) // OK. Int is a subtype of Comparable&lt;Int&gt;
+			sort(listOf(HashMap&lt;Int, String&gt;())) // Error: HashMap&lt;Int, String&gt; is not a subtype of Comparable&lt;HashMap&lt;Int, String&gt;&gt;
+			</code></pre>
+			<p>
+				The default upper bound (if none specified) is <code>Any?</code>. Only one
+				upper bound can be specified inside the angle brackets. If the same type
+				parameter needs more than one upper bound, we need a separate where-clause:
+			</p>
+			<pre><code>fun &lt;T&gt; cloneWhenGreater(list: List&lt;T&gt;, threshold: T): List&lt;T&gt;
+				where T : Comparable,
+					  T : Cloneable {
+			  return list.filter { it &gt; threshold }.map { it.clone() }
+			}</code></pre>
+
+
+		]]>
+	</string>
+
+	<string name="topicContentNestedClasses">
+		<![CDATA[
+
+ 			<h1 id="nested-classes">
+				Nested Classes
+				<a
+					href="https://kotlinlang.org/docs/reference/nested-classes.html#nested-classes"
+				>
+				</a>
+			</h1>
+			<p>
+				Classes can be nested in other classes
+			</p>
+			<pre><code>class Outer {
+				private val bar: Int = 1
+				class Nested {
+					fun foo() = 2
+				}
+			}
+
+			val demo = Outer.Nested().foo() // == 2
+			</code></pre>
+			<h2 id="inner-classes">
+				Inner classes
+				<a
+					href="https://kotlinlang.org/docs/reference/nested-classes.html#inner-classes"
+				>
+				</a>
+			</h2>
+			<p>
+				A class may be marked as inner to be able to access members of outer class.
+				Inner classes carry a reference to an object of an outer class:
+			</p>
+			<pre><code>class Outer {
+				private val bar: Int = 1
+				inner class Inner {
+					fun foo() = bar
+				}
+			}
+
+			val demo = Outer().Inner().foo() // == 1
+			</code></pre>
+			<p>
+				See
+				<a href="https://kotlinlang.org/docs/reference/this-expressions.html">
+					Qualified this expressions
+				</a>
+				to learn about disambiguation of this in inner classes.
+			</p>
+			<h2 id="anonymous-inner-classes">
+				Anonymous inner classes
+				<a
+					href="https://kotlinlang.org/docs/reference/nested-classes.html#anonymous-inner-classes"
+				>
+				</a>
+			</h2>
+			<p>
+				Anonymous inner class instances are created using an
+				<a
+					href="https://kotlinlang.org/docs/reference/object-declarations.html#object-expressions"
+				>
+					object expression
+				</a>
+				:
+			</p>
+			<pre><code>window.addMouseListener(object: MouseAdapter() {
+				override fun mouseClicked(e: MouseEvent) {
+					// ...
+				}
+
+				override fun mouseEntered(e: MouseEvent) {
+					// ...
+				}
+			})
+			</code></pre>
+			<p>
+				If the object is an instance of a functional Java interface (i.e. a Java
+				interface with a single abstract method), you can create it using a lambda
+				expression prefixed with the type of the interface:
+			</p>
+			<pre><code>val listener = ActionListener { println("clicked") }</code></pre>
+
+		]]>
+	</string>
+
+	<string name="topicContentEnumClasses">
+		<![CDATA[
+
+ 			<h1 id="enum-classes">
+				Enum Classes
+				<a
+					href="https://kotlinlang.org/docs/reference/enum-classes.html#enum-classes"
+				>
+				</a>
+			</h1>
+			<p>
+				The most basic usage of enum classes is implementing type-safe enums
+			</p>
+			<pre><code>enum class Direction {
+				NORTH, SOUTH, WEST, EAST
+			}
+			</code></pre>
+			<p>
+				Each enum constant is an object. Enum constants are separated with commas.
+			</p>
+			<h2 id="initialization">
+				Initialization
+				<a
+					href="https://kotlinlang.org/docs/reference/enum-classes.html#initialization"
+				>
+				</a>
+			</h2>
+			<p>
+				Since each enum is an instance of the enum class, they can be initialized
+			</p>
+			<pre><code>enum class Color(val rgb: Int) {
+					RED(0xFF0000),
+					GREEN(0x00FF00),
+					BLUE(0x0000FF)
+			}
+			</code></pre>
+			<h2 id="anonymous-classes">
+				Anonymous Classes
+				<a
+					href="https://kotlinlang.org/docs/reference/enum-classes.html#anonymous-classes"
+				>
+				</a>
+			</h2>
+			<p>
+				Enum constants can also declare their own anonymous classes
+			</p>
+			<pre><code>enum class ProtocolState {
+				WAITING {
+					override fun signal() = TALKING
+				},
+
+				TALKING {
+					override fun signal() = WAITING
+				};
+
+				abstract fun signal(): ProtocolState
+			}
+			</code></pre>
+			<p>
+				with their corresponding methods, as well as overriding base methods. Note
+				that if the enum class defines any members, you need to separate the enum
+				constant definitions from the member definitions with a semicolon, just
+				like in Java.
+			</p>
+			<h2 id="working-with-enum-constants">
+				Working with Enum Constants
+				<a
+					href="https://kotlinlang.org/docs/reference/enum-classes.html#working-with-enum-constants"
+				>
+				</a>
+			</h2>
+			<p>
+				Just like in Java, enum classes in Kotlin have synthetic methods allowing
+				to list the defined enum constants and to get an enum constant by its name.
+				The signatures of these methods are as follows (assuming the name of the
+				enum class is <code>EnumClass</code>):
+			</p>
+			<pre><code>EnumClass.valueOf(value: String): EnumClass
+			EnumClass.values(): Array&lt;EnumClass&gt;
+			</code></pre>
+			<p>
+			The <code>valueOf()</code> method throws an    <code>IllegalArgumentException</code> if the specified name does not match
+				any of the enum constants defined in the class.
+			</p>
+			<p>
+				Since Kotlin 1.1, it\'s possible to access the constants in an enum class in
+			a generic way, using the <code>enumValues&lt;T&gt;()</code> and    <code>enumValueOf&lt;T&gt;()</code> functions:
+			</p>
+			<pre><code>enum class RGB { RED, GREEN, BLUE }
+
+			inline fun &lt;reified T : Enum&lt;T&gt;&gt; printAllValues() {
+				print(enumValues&lt;T&gt;().joinToString { it.name })
+			}
+
+			printAllValues&lt;RGB&gt;() // prints RED, GREEN, BLUE
+			</code></pre>
+			<p>
+				Every enum constant has properties to obtain its name and position in the
+				enum class declaration:
+			</p>
+			<pre><code>
+
+			val name: String <br><br>
+			val ordinal: Int
+
+			</code></pre>
+			<p>
+				The enum constants also implement the
+				<a
+					href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-comparable/index.html"
+				>
+					Comparable
+				</a>
+				interface, with the natural order being the order in which they are defined
+				in the enum class.
+			</p>
+
+		]]>
+	</string>
+
+	<string name="topicContentObjects">
+		<![CDATA[
+
+ 			<h1 id="object-expressions-and-declarations">
+				Object Expressions and Declarations
+				<a
+					href="https://kotlinlang.org/docs/reference/object-declarations.html#object-expressions-and-declarations"
+				>
+				</a>
+			</h1>
+			<p>
+				Sometimes we need to create an object of a slight modification of some
+				class, without explicitly declaring a new subclass for it. Java handles
+				this case with <em>anonymous inner classes</em>. Kotlin slightly
+			generalizes this concept with <em>object expressions</em> and    <em>object declarations</em>.
+			</p>
+			<h2 id="object-expressions">
+				Object expressions
+				<a
+					href="https://kotlinlang.org/docs/reference/object-declarations.html#object-expressions"
+				>
+				</a>
+			</h2>
+			<p>
+				To create an object of an anonymous class that inherits from some type (or
+				types), we write:
+			</p>
+			<pre><code>window.addMouseListener(object : MouseAdapter() {
+				override fun mouseClicked(e: MouseEvent) {
+					// ...
+				}
+
+				override fun mouseEntered(e: MouseEvent) {
+					// ...
+				}
+			})
+			</code></pre>
+			<p>
+				If a supertype has a constructor, appropriate constructor parameters must
+				be passed to it. Many supertypes may be specified as a comma-separated list
+				after the colon:
+			</p>
+			<pre><code>open class A(x: Int) {
+				public open val y: Int = x
+			}
+
+			interface B {...}
+
+			val ab: A = object : A(1), B {
+				override val y = 15
+			}
+			</code></pre>
+			<p>
+				If, by any chance, we need "just an object", with no nontrivial supertypes,
+				we can simply say:
+			</p>
+			<pre><code>fun foo() {
+				val adHoc = object {
+					var x: Int = 0
+					var y: Int = 0
+				}
+				print(adHoc.x + adHoc.y)
+			}
+			</code></pre>
+			<p>
+				Note that anonymous objects can be used as types only in local and private
+				declarations. If you use an anonymous object as a return type of a public
+				function or the type of a public property, the actual type of that function
+			or property will be the declared supertype of the anonymous object, or    <code>Any</code> if you didn\'t declare any supertype. Members added in the
+				anonymous object will not be accessible.
+			</p>
+			<pre><code>class C {
+				// Private function, so the return type is the anonymous object type
+				private fun foo() = object {
+					val x: String = "x"
+				}
+
+				// Public function, so the return type is Any
+				fun publicFoo() = object {
+					val x: String = "x"
+				}
+
+				fun bar() {
+					val x1 = foo().x        // Works
+					val x2 = publicFoo().x  // ERROR: Unresolved reference \'x\'
+				}
+			}
+			</code></pre>
+			<p>
+				Just like Java\'s anonymous inner classes, code in object expressions can
+				access variables from the enclosing scope. (Unlike Java, this is not
+				restricted to final variables.)
+			</p>
+			<pre><code>fun countClicks(window: JComponent) {
+				var clickCount = 0
+				var enterCount = 0
+
+				window.addMouseListener(object : MouseAdapter() {
+					override fun mouseClicked(e: MouseEvent) {
+						clickCount++
+					}
+
+					override fun mouseEntered(e: MouseEvent) {
+						enterCount++
+					}
+				})
+				// ...
+			}
+			</code></pre>
+			<h2 id="object-declarations">
+				Object declarations
+				<a
+					href="https://kotlinlang.org/docs/reference/object-declarations.html#object-declarations"
+				>
+				</a>
+			</h2>
+			<p>
+				<a href="http://en.wikipedia.org/wiki/Singleton_pattern">Singleton</a>
+				is a very useful pattern, and Kotlin (after Scala) makes it easy to declare
+				singletons:
+			</p>
+			<pre><code>object DataProviderManager {
+				fun registerDataProvider(provider: DataProvider) {
+					// ...
+				}
+
+				val allDataProviders: Collection&lt;DataProvider&gt;
+					get() = // ...
+			}
+			</code></pre>
+			<p>
+				This is called an <em>object declaration</em>, and it always has a name
+				following the object keyword. Just like a variable declaration, an object
+				declaration is not an expression, and cannot be used on the right hand side
+				of an assignment statement.
+			</p>
+			<p>
+				To refer to the object, we use its name directly:
+			</p>
+			<pre><code>DataProviderManager.registerDataProvider(...)
+			</code></pre>
+			<p>
+				Such objects can have supertypes:
+			</p>
+			<pre><code>object DefaultListener : MouseAdapter() {
+				override fun mouseClicked(e: MouseEvent) {
+					// ...
+				}
+
+				override fun mouseEntered(e: MouseEvent) {
+					// ...
+				}
+			}
+			</code></pre>
+			<p>
+				NOTE: object declarations can\'t be local (i.e. be nested directly inside a
+				function), but they can be nested into other object declarations or
+				non-inner classes.
+			</p>
+			<h3 id="companion-objects">
+				Companion Objects
+				<a
+					href="https://kotlinlang.org/docs/reference/object-declarations.html#companion-objects"
+				>
+				</a>
+			</h3>
+			<p>
+				An object declaration inside a class can be marked with the companion
+				keyword:
+			</p>
+			<pre><code>class MyClass {
+				companion object Factory {
+					fun create(): MyClass = MyClass()
+				}
+			}
+			</code></pre>
+			<p>
+				Members of the companion object can be called by using simply the class
+				name as the qualifier:
+			</p>
+			<pre><code>val instance = MyClass.create()
+			</code></pre>
+			<p>
+			The name of the companion object can be omitted, in which case the name    <code>Companion</code> will be used:
+			</p>
+			<pre><code>class MyClass {
+				companion object {
+				}
+			}
+
+			val x = MyClass.Companion
+			</code></pre>
+			<p>
+				Note that, even though the members of companion objects look like static
+				members in other languages, at runtime those are still instance members of
+				real objects, and can, for example, implement interfaces:
+			</p>
+			<pre><code>interface Factory&lt;T&gt; {
+				fun create(): T
+			}
+
+
+			class MyClass {
+				companion object : Factory&lt;MyClass&gt; {
+					override fun create(): MyClass = MyClass()
+				}
+			}
+			</code></pre>
+			<p>
+				However, on the JVM you can have members of companion objects generated as
+				real static methods and fields, if you use the <code>@JvmStatic</code>
+				annotation. See the
+				<a
+					href="https://kotlinlang.org/docs/reference/java-to-kotlin-interop.html#static-fields"
+				>
+					Java interoperability
+				</a>
+				section for more details.
+			</p>
+			<h3 id="semantic-difference-between-object-expressions-and-declarations">
+				Semantic difference between object expressions and declarations
+				<a
+					href="https://kotlinlang.org/docs/reference/object-declarations.html#semantic-difference-between-object-expressions-and-declarations"
+				>
+				</a>
+			</h3>
+			<p>
+				There is one important semantic difference between object expressions and
+				object declarations:
+			</p>
+			<ul>
+				<li>
+					object expressions are executed (and initialized) immediately, where
+					they are used
+				</li>
+				<li>
+					object declarations are initialized lazily, when accessed for the first
+					time
+				</li>
+				<li>
+					a companion object is initialized when the corresponding class is
+					loaded (resolved), matching the semantics of a Java static initializer
+				</li>
+			</ul>
+
+		]]>
+	</string>
+
+	<string name="topicContentDelegation">
+		<![CDATA[
+
+ 			<h1 id="delegation">
+				Delegation
+				<a href="https://kotlinlang.org/docs/reference/delegation.html#delegation">
+				</a>
+			</h1>
+			<h2 id="class-delegation">
+				Class Delegation
+				<a
+					href="https://kotlinlang.org/docs/reference/delegation.html#class-delegation"
+				>
+				</a>
+			</h2>
+			<p>
+				The
+				<a href="https://en.wikipedia.org/wiki/Delegation_pattern">
+					Delegation pattern
+				</a>
+				has proven to be a good alternative to implementation inheritance, and
+			Kotlin supports it natively requiring zero boilerplate code. A class    <code>Derived</code> can inherit from an interface <code>Base</code>and
+				delegate all of its public methods to a specified object:
+			</p>
+			<pre><code>interface Base {
+				fun print()
+			}
+
+			class BaseImpl(val x: Int) : Base {
+				override fun print() { print(x) }
+			}
+
+			class Derived(b: Base) : Base by b
+
+			fun main(args: Array&lt;String&gt;) {
+				val b = BaseImpl(10)
+				Derived(b).print() // prints 10
+			}
+			</code></pre>
+			<p>
+			The by-clause in the supertype list for <code>Derived</code> indicates that    <code>b</code> will be stored internally in objects of <code>Derived</code>
+				and the compiler will generate all the methods of <code>Base</code> that
+				forward to <code>b</code>.
+			</p>
+			<p>
+			Note that overrides work as you might expect: The compiler will use your    <code>override</code> implementations instead of those in the delegate
+			object. If we were to add    <code>override fun print() { print("abc") }</code> to <code>Derived</code>,
+				the program would print "abc" instead of "10".
+			</p>
+
+		]]>
+	</string>
+
+	<string name="topicContentDelegatedProperties">
+		<![CDATA[
+
+ 			<h1 id="delegated-properties">
+				Delegated Properties
+				<a
+					href="https://kotlinlang.org/docs/reference/delegated-properties.html#delegated-properties"
+				>
+				</a>
+			</h1>
+			<p>
+				There are certain common kinds of properties, that, though we can implement
+				them manually every time we need them, would be very nice to implement once
+				and for all, and put into a library. Examples include
+			</p>
+			<ul>
+				<li>
+					lazy properties: the value gets computed only upon first access,
+				</li>
+				<li>
+					observable properties: listeners get notified about changes to this
+					property,
+				</li>
+				<li>
+					storing properties in a map, instead of a separate field for each
+					property.
+				</li>
+			</ul>
+			<p>
+			To cover these (and other) cases, Kotlin supports    <em>delegated properties</em>:
+			</p>
+			<pre><code>class Example {
+				var p: String by Delegate()
+			}
+			</code></pre>
+			<p>
+				The syntax is:
+				<code>
+					val/var &lt;property name&gt;: &lt;Type&gt; by &lt;expression&gt;
+				</code>
+			. The expression after by is the <em>delegate</em>, because    <code>get()</code> (and <code>set()</code>) corresponding to the property
+				will be delegated to its <code>getValue()</code>and <code>setValue()</code>
+				methods. Property delegates don’t have to implement any interface, but they
+			have to provide a <code>getValue()</code> function (and    <code>setValue()</code> — for var\'s). For example:
+			</p>
+			<pre><code>class Delegate {
+				operator fun getValue(thisRef: Any?, property: KProperty&lt;*&gt;): String {
+					return "$thisRef, thank you for delegating '${property.name}' to me!"
+				}
+
+				operator fun setValue(thisRef: Any?, property: KProperty&lt;*&gt;, value: String) {
+					println("$value has been assigned to '${property.name} in $thisRef.'")
+				}
+			}
+			</code></pre>
+			<p>
+			When we read from <code>p</code> that delegates to an instance of<code>Delegate</code>, the <code>getValue()</code> function from    <code>Delegate</code> is called, so that its first parameter is the object
+			we read <code>p</code> from and the second parameter holds a description of    <code>p</code> itself (e.g. you can take its name). For example:
+			</p>
+			<pre><code>val e = Example()
+			println(e.p)
+			</code></pre>
+			<p>
+				This prints
+			</p>
+			<pre><code>Example@33a17727, thank you for delegating ‘p’ to me!
+			</code></pre>
+			<p>
+				Similarly, when we assign to <code>p</code>, the <code>setValue()</code>
+				function is called. The first two parameters are the same, and the third
+				holds the value being assigned:
+			</p>
+			<pre><code>e.p = "NEW"
+			</code></pre>
+			<p>
+				This prints
+			</p>
+			<pre><code>NEW has been assigned to ‘p’ in Example@33a17727.
+			</code></pre>
+			<p>
+				The specification of the requirements to the delegated object can be found
+				<a
+					href="https://kotlinlang.org/docs/reference/delegated-properties.html#property-delegate-requirements"
+				>
+					below
+				</a>
+				.
+			</p>
+			<p>
+				Note that since Kotlin 1.1 you can declare a delegated property inside a
+				function or code block, it shouldn\'t necessarily be a member of a class.
+				Below you can find
+				<a
+					href="https://kotlinlang.org/docs/reference/delegated-properties.html#local-delegated-properties-since-11"
+				>
+					the example
+				</a>
+				.
+			</p>
+			<h2 id="standard-delegates">
+				Standard Delegates
+				<a
+					href="https://kotlinlang.org/docs/reference/delegated-properties.html#standard-delegates"
+				>
+				</a>
+			</h2>
+			<p>
+				The Kotlin standard library provides factory methods for several useful
+				kinds of delegates.
+			</p>
+			<h3 id="lazy">
+				Lazy
+				<a
+					href="https://kotlinlang.org/docs/reference/delegated-properties.html#lazy"
+				>
+				</a>
+			</h3>
+			<p>
+				<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/lazy.html">
+					<code>lazy()</code>
+				</a>
+			is a function that takes a lambda and returns an instance of    <code>Lazy&lt;T&gt;</code> which can serve as a delegate for implementing a
+				lazy property: the first call to <code>get()</code> executes the lambda
+			passed to <code>lazy()</code> and remembers the result, subsequent calls to    <code>get()</code> simply return the remembered result.
+			</p>
+			<pre><code>val lazyValue: String by lazy {
+				println("computed!")
+				"Hello"
+			}
+
+			fun main(args: Array&lt;String&gt;) {
+				println(lazyValue)
+				println(lazyValue)
+			}
+			</code></pre>
+			<p>
+				This example prints:
+			</p>
+			<pre><code>computed!
+			Hello
+			Hello
+			</code></pre>
+			<p>
+				By default, the evaluation of lazy properties is synchronized: the value is
+				computed only in one thread, and all threads will see the same value. If
+				the synchronization of initialization delegate is not required, so that
+			multiple threads can execute it simultaneously, pass<code>LazyThreadSafetyMode.PUBLICATION</code> as a parameter to the    <code>lazy()</code> function. And if you\'re sure that the initialization
+			will always happen on a single thread, you can use    <code>LazyThreadSafetyMode.NONE</code> mode, which doesn\'t incur any
+				thread-safety guarantees and the related overhead.
+			</p>
+			<h3 id="observable">
+				Observable
+				<a
+					href="https://kotlinlang.org/docs/reference/delegated-properties.html#observable"
+				>
+				</a>
+			</h3>
+			<p>
+				<a
+					href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.properties/-delegates/observable.html"
+				>
+					<code>Delegates.observable()</code>
+				</a>
+				takes two arguments: the initial value and a handler for modifications. The
+				handler gets called every time we assign to the property (<em>after</em>
+				the assignment has been performed). It has three parameters: a property
+				being assigned to, the old value and the new one:
+			</p>
+			<pre><code>import kotlin.properties.Delegates
+
+			class User {
+				var name: String by Delegates.observable("&lt;no name&gt;") {
+					prop, old, new -&gt;
+					println("$old -&gt; $new")
+				}
+			}
+
+			fun main(args: Array&lt;String&gt;) {
+				val user = User()
+				user.name = "first"
+				user.name = "second"
+			}
+			</code></pre>
+			<p>
+				This example prints:
+			</p>
+			<pre><code>&lt;no name&gt; -&gt; first
+			first -&gt; second
+			</code></pre>
+			<p>
+				If you want to be able to intercept an assignment and "veto" it, use
+				<a
+					href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.properties/-delegates/vetoable.html"
+				>
+					<code>vetoable()</code>
+				</a>
+			instead of <code>observable()</code>. The handler passed to the    <code>vetoable</code> is called <em>before</em> the assignment of a new
+				property value has been performed.
+			</p>
+			<h2 id="storing-properties-in-a-map">
+				Storing Properties in a Map
+				<a
+					href="https://kotlinlang.org/docs/reference/delegated-properties.html#storing-properties-in-a-map"
+				>
+				</a>
+			</h2>
+			<p>
+				One common use case is storing the values of properties in a map. This
+				comes up often in applications like parsing JSON or doing other “dynamic”
+				things. In this case, you can use the map instance itself as the delegate
+				for a delegated property.
+			</p>
+			<pre><code>class User(val map: Map&lt;String, Any?&gt;) {
+				val name: String by map
+				val age: Int     by map
+			}
+			</code></pre>
+			<p>
+				In this example, the constructor takes a map:
+			</p>
+			<pre><code>val user = User(mapOf(
+				"name" to "John Doe",
+				"age"  to 25
+			))
+			</code></pre>
+			<p>
+				Delegated properties take values from this map (by the string keys –– names
+				of properties):
+			</p>
+			<pre><code>println(user.name) // Prints "John Doe"
+			println(user.age)  // Prints 25
+			</code></pre>
+			<p>
+				This works also for var’s properties if you use a <code>MutableMap</code>
+				instead of read-only <code>Map</code>:
+			</p>
+			<pre><code>class MutableUser(val map: MutableMap&lt;String, Any?&gt;) {
+				var name: String by map
+				var age: Int     by map
+			}
+			</code></pre>
+			<h2 id="local-delegated-properties-since-11">
+				Local Delegated Properties (since 1.1)
+				<a
+					href="https://kotlinlang.org/docs/reference/delegated-properties.html#local-delegated-properties-since-11"
+				>
+				</a>
+			</h2>
+			<p>
+				You can declare local variables as delegated properties. For instance, you
+				can make a local variable lazy:
+			</p>
+			<pre><code>fun example(computeFoo: () -&gt; Foo) {
+				val memoizedFoo by lazy(computeFoo)
+
+				if (someCondition &amp;&amp; memoizedFoo.isValid()) {
+					memoizedFoo.doSomething()
+				}
+			}
+			</code></pre>
+			<p>
+				The <code>memoizedFoo</code> variable will be computed on the first access
+				only. If <code>someCondition</code> fails, the variable won\'t be computed
+				at all.
+			</p>
+			<h2 id="property-delegate-requirements">
+				Property Delegate Requirements
+				<a
+					href="https://kotlinlang.org/docs/reference/delegated-properties.html#property-delegate-requirements"
+				>
+				</a>
+			</h2>
+			<p>
+				Here we summarize requirements to delegate objects.
+			</p>
+			<p>
+				For a read-only property (i.e. a val), a delegate has to provide a function
+				named <code>getValue</code> that takes the following parameters:
+			</p>
+			<ul>
+				<li>
+					<code>thisRef</code>
+					— must be the same or a supertype of the <em>property owner</em> (for
+					extension properties — the type being extended),
+				</li>
+				<li>
+					<code>property</code>
+					— must be of type <code>KProperty&lt;*&gt;</code> or its supertype,
+				</li>
+			</ul>
+			<p>
+				this function must return the same type as property (or its subtype).
+			</p>
+			<p>
+				For a mutable property (a var), a delegate has to <em>additionally</em>
+				provide a function named <code>setValue</code> that takes the following
+				parameters:
+			</p>
+			<ul>
+				<li>
+					<code>thisRef</code>
+					— same as for <code>getValue()</code>,
+				</li>
+				<li>
+					<code>property</code>
+					— same as for <code>getValue()</code>,
+				</li>
+				<li>
+					new value — must be of the same type as a property or its supertype.
+				</li>
+			</ul>
+			<p>
+				<code>getValue()</code>
+				and/or <code>setValue()</code> functions may be provided either as member
+				functions of the delegate class or extension functions. The latter is handy
+				when you need to delegate property to an object which doesn\'t originally
+			provide these functions. Both of the functions need to be marked with the    <code>operator</code>keyword.
+			</p>
+			<p>
+			The delegate class may implement one of the interfaces    <code>ReadOnlyProperty</code> and <code>ReadWriteProperty</code>containing
+				the required <code>operator</code> methods. These interfaces are declared
+				in the Kotlin standard library:
+			</p>
+			<pre><code>interface ReadOnlyProperty&lt;in R, out T&gt; {
+				operator fun getValue(thisRef: R, property: KProperty&lt;*&gt;): T
+			}
+
+			interface ReadWriteProperty&lt;in R, T&gt; {
+				operator fun getValue(thisRef: R, property: KProperty&lt;*&gt;): T
+				operator fun setValue(thisRef: R, property: KProperty&lt;*&gt;, value: T)
+			}
+			</code></pre>
+			<h3 id="translation-rules">
+				Translation Rules
+				<a
+					href="https://kotlinlang.org/docs/reference/delegated-properties.html#translation-rules"
+				>
+				</a>
+			</h3>
+			<p>
+				Under the hood for every delegated property the Kotlin compiler generates
+			an auxiliary property and delegates to it. For instance, for the property    <code>prop</code> the hidden property <code>prop$delegate</code> is
+				generated, and the code of the accessors simply delegates to this
+				additional property:
+			</p>
+			<pre><code>class C {
+				var prop: Type by MyDelegate()
+			}
+
+			// this code is generated by the compiler instead:
+			class C {
+				private val prop$delegate = MyDelegate()
+				var prop: Type
+					get() = prop$delegate.getValue(this, this::prop)
+					set(value: Type) = prop$delegate.setValue(this, this::prop, value)
+			}
+			</code></pre>
+			<p>
+			The Kotlin compiler provides all the necessary information about    <code>prop</code> in the arguments: the first argument <code>this</code>
+			refers to an instance of the outer class <code>C</code> and<code>this::prop</code> is a reflection object of the    <code>KProperty</code>type describing <code>prop</code> itself.
+			</p>
+			<p>
+				Note that the syntax <code>this::prop</code> to refer a
+				<a
+					href="https://kotlinlang.org/docs/reference/reflection.html#bound-function-and-property-references-since-11"
+				>
+					bound callable reference
+				</a>
+				in the code directly is available only since Kotlin 1.1.
+			</p>
+			<h3 id="providing-a-delegate-since-11">
+				Providing a delegate (since 1.1)
+				<a
+					href="https://kotlinlang.org/docs/reference/delegated-properties.html#providing-a-delegate-since-11"
+				>
+				</a>
+			</h3>
+			<p>
+				By defining the <code>provideDelegate</code> operator you can extend the
+				logic of creating the object to which the property implementation is
+				delegated. If the object used on the right hand side of <code>by</code>
+				defines <code>provideDelegate</code> as a member or extension function,
+				that function will be called to create the property delegate instance.
+			</p>
+			<p>
+				One of the possible use cases of <code>provideDelegate</code> is to check
+				property consistency when the property is created, not only in its getter
+				or setter.
+			</p>
+			<p>
+				For example, if you want to check the property name before binding, you can
+				write something like this:
+			</p>
+			<pre><code>class ResourceLoader&lt;T&gt;(id: ResourceID&lt;T&gt;) {
+				operator fun provideDelegate(
+						thisRef: MyUI,
+						prop: KProperty&lt;*&gt;
+				): ReadOnlyProperty&lt;MyUI, T&gt; {
+					checkProperty(thisRef, prop.name)
+					// create delegate
+				}
+
+				private fun checkProperty(thisRef: MyUI, name: String) { ... }
+			}
+
+			fun &lt;T&gt; bindResource(id: ResourceID&lt;T&gt;): ResourceLoader&lt;T&gt; { ... }
+
+			class MyUI {
+				val image by bindResource(ResourceID.image_id)
+				val text by bindResource(ResourceID.text_id)
+			}
+			</code></pre>
+			<p>
+			The parameters of <code>provideDelegate</code> are the same as for    <code>getValue</code>:
+			</p>
+			<ul>
+				<li>
+					<code>thisRef</code>
+					— must be the same or a supertype of the <em>property owner</em> (for
+					extension properties — the type being extended),
+				</li>
+				<li>
+					<code>property</code>
+					— must be of type <code>KProperty&lt;*&gt;</code> or its supertype.
+				</li>
+			</ul>
+			<p>
+				The <code>provideDelegate</code> method is called for each property during
+				the creation of the <code>MyUI</code> instance, and it performs the
+				necessary validation right away.
+			</p>
+			<p>
+				Without this ability to intercept the binding between the property and its
+				delegate, to achieve the same functionality you\'d have to pass the property
+				name explicitly, which isn\'t very convenient:
+			</p>
+			<pre><code>// Checking the property name without "provideDelegate" functionality
+			class MyUI {
+				val image by bindResource(ResourceID.image_id, "image")
+				val text by bindResource(ResourceID.text_id, "text")
+			}
+
+			fun &lt;T&gt; MyUI.bindResource(
+					id: ResourceID&lt;T&gt;,
+					propertyName: String
+			): ReadOnlyProperty&lt;MyUI, T&gt; {
+			   checkProperty(this, propertyName)
+			   // create delegate
+			}
+			</code></pre>
+			<p>
+				In the generated code, the <code>provideDelegate</code> method is called to
+				initialize the auxiliary <code>prop$delegate</code>property. Compare the
+			generated code for the property declaration    <code>val prop: Type by MyDelegate()</code>with the generated code
+				<a
+					href="https://kotlinlang.org/docs/reference/delegated-properties.html#translation-rules"
+				>
+					above
+				</a>
+				(when the <code>provideDelegate</code> method is not present):
+			</p>
+			<pre><code>class C {
+				var prop: Type by MyDelegate()
+			}
+
+			// this code is generated by the compiler
+			// when the \'provideDelegate\' function is available:
+			class C {
+				// calling "provideDelegate" to create the additional "delegate" property
+				private val prop$delegate = MyDelegate().provideDelegate(this, this::prop)
+				val prop: Type
+					get() = prop$delegate.getValue(this, this::prop)
+			}
+			</code></pre>
+			<p>
+				Note that the <code>provideDelegate</code> method affects only the creation
+				of the auxiliary property and doesn\'t affect the code generated for getter
+				or setter.
+			</p>
+
+		]]>
+	</string>
+
+</resources>

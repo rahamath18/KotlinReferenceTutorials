@@ -1,0 +1,107 @@
+<resources>
+
+    <string name="app_name_short">Kotlin Ref+Tut</string>
+    <string name="app_name">Kotlin Reference + Tutorials</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="labelCallServlet"> 7. Call a Servlet</string>
+    <string name="labelCallSpring"> 8. Call a Spring Controller</string>
+    <string name="labelCallRESTService"> 9. Call a REST Service</string>
+    <string name="labelPOSTPERSISTAForm"> 10. POST and PERSIST a Form</string>
+
+    <string name="call_a_servlet_topic_content">
+         <![CDATA[
+         <p>
+            <h5>Call a Servlet</h5><br>
+
+            <strong>
+
+                This screen available asap from <br><br>
+
+            </strong>
+
+            04 Aug 2017, 3:00 AM Fri, Indian Standard Time (IST)  <br><br>
+
+            is <br><br>
+
+            03 Aug 2017, 9:30 PM Thu, Greenwich Mean Time (GMT) <br><br>
+
+         </p>
+         ]]>
+     </string>
+
+    <string name="call_a_spring_topic_content">
+         <![CDATA[
+         <p>
+            <h5>Call a Spring Controller</h5><br>
+
+            <strong>
+
+                This screen available asap from <br><br>
+
+            </strong>
+
+            07 Aug 2017, 3:00 AM Mon, Indian Standard Time (IST)  <br><br>
+
+            is <br><br>
+
+            06 Aug 2017, 9:30 PM Sun, Greenwich Mean Time (GMT) <br><br>
+
+         </p>
+         ]]>
+     </string>
+
+    <string name="call_a_REST_service_topic_content">
+         <![CDATA[
+         <p>
+            <h5>Call a REST Service</h5><br>
+
+            <strong>
+
+                This screen available asap from <br><br>
+
+            </strong>
+
+            10 Aug 2017, 3:00 AM Thu, Indian Standard Time (IST)  <br><br>
+
+            is <br><br>
+
+            09 Aug 2017, 9:30 PM Wed, Greenwich Mean Time (GMT) <br><br>
+
+         </p>
+         ]]>
+     </string>
+
+    <string name="post_persist_form_topic_content">
+         <![CDATA[
+         <p>
+            <h5>POST and Persist a Form</h5><br>
+
+            <strong>
+
+                This screen available asap from <br><br>
+
+            </strong>
+
+            13 Aug 2017, 3:00 AM Sun, Indian Standard Time (IST)  <br><br>
+
+            is <br><br>
+
+            12 Aug 2017, 9:30 PM Sat, Greenwich Mean Time (GMT) <br><br>
+
+         </p>
+         ]]>
+     </string>
+
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_activity_about_app">About This App</string>
+    <string name="title_activity_topic">Topic</string>
+    <string name="title_activity_introduction">1. Introduction</string>
+    <string name="title_activity_java_code_vs_kotlin_code">2. Java Code Vs Kotlin Code</string>
+    <string name="title_activity_basics">3. Basics</string>
+    <string name="title_activity_classesand_objects">4. Classes and Objects</string>
+    <string name="title_activity_functionsand_lambdas">5. Functions and Lambdas</string>
+    <string name="title_activity_collections">6. Collections</string>
+</resources>
